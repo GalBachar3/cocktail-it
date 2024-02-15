@@ -9,3 +9,32 @@ export const getUsers = async (req, res, next) => {
         next(error)
     }
 };
+
+export const deleteUser = async (req, res) => {
+    const userId = req.params.id;
+
+    UserModel.findByIdAndDelete(userId, (err, deletedUser) => {
+        if (err) {
+            return res.status(500).json({ error: err.message });
+        }
+
+        res.json();
+    });
+}
+
+export const updateUser = async (req, res) => {
+    const userId = req.params.id;
+  
+    UserModel.findByIdAndUpdate(
+        userId,
+        req.body, 
+        { new: true },
+        (err, updatedUser) => {
+          if (err) {
+            return res.status(500).json({ error: err.message });
+          }
+    
+          res.json(updatedUser);
+        }
+      );
+  }
