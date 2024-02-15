@@ -1,6 +1,6 @@
 import { AsyncRouter } from 'express-async-router';
 import validate from '../middlewares/validation.middleware.js';
-import { LoginUserValidationSchema, NewUserValidationSchema } from '../users/user.validate.js';
+import { LoginUserValidationSchema, NewUserValidationSchema } from '../api/users/user.validate.js';
 import { authUser, loginUser, registerUser } from './auth.controller.js';
 
 const router = AsyncRouter();

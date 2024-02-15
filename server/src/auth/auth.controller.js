@@ -2,7 +2,7 @@ import createHttpError from 'http-errors';
 import _ from 'lodash';
 import { comparePaswords } from '../services/hashPassword.js';
 import { getAccessToken, getDecodedToken } from '../services/token.js';
-import { UserModel } from '../users/user.model.js';
+import { UserModel } from '../models/user.model.js';
 
 const findUserByUsername = async username => await UserModel.findOne({ username });
 
