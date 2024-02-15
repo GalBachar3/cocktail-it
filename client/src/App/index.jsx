@@ -13,7 +13,7 @@ const App = () => {
   return (
     <BrowserRouter>
       <Center sx={{ height: 1 }}>
-        {!isEmpty(user) ? <AuthenticatedApp /> : <UnauthenticatedApp />}
+        {!isEmpty(user) ? <AuthenticatedApp user={user} /> : <UnauthenticatedApp />}
         <ToastContainer autoClose={1500} position='bottom-right' />
       </Center>
     </BrowserRouter>

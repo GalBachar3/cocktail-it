@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import stringToColor from 'string-to-color';
 import { useColorMode } from '../../../../Providers/ThemeProvider';
 import { useUser } from '../../../../Providers/UserProvider';
+import { padding } from '@mui/system';
 
 const getInitials = fullName => fullName.trim().split(/\s+/).map(name => name[0].toUpperCase()).join('').slice(0, 3);
 
@@ -34,6 +35,10 @@ const UserMenu = () => {
         setAnchorEl(null);
     };
 
+    const navigateToUserProfile = () => {
+        navigate('/profile');
+    };
+
     return (
         <>
             <Tooltip title="Account settings">
@@ -42,6 +47,12 @@ const UserMenu = () => {
                 </IconButton>
             </Tooltip>
             <Menu open={Boolean(anchorEl)} anchorEl={anchorEl} onClose={closeMenu}>
+                <MenuItem onClick={navigateToUserProfile}>
+                <ListItemIcon style={{ marginRight: '3px' }}>
+                        {<Avatar/>}
+                    </ListItemIcon>
+                    Profile
+                </MenuItem>
                 <MenuItem onClick={toggleColorMode}>
                     <ListItemIcon>
                         {mode === 'light' ? <LightMode fontSize="small" /> : <ModeNight fontSize="small" />}
