@@ -1,4 +1,4 @@
-import { LightMode, Logout, ModeNight } from '@mui/icons-material';
+import { LightMode, Logout, ModeNight, LocalDrinkRounded } from '@mui/icons-material';
 import { Avatar, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -39,6 +39,10 @@ const UserMenu = () => {
         navigate('/profile');
     };
 
+    const navigateToCocktailsPage = () => {
+        navigate('/cocktails');
+    };
+
     return (
         <>
             <Tooltip title="Account settings">
@@ -52,6 +56,12 @@ const UserMenu = () => {
                         {<Avatar/>}
                     </ListItemIcon>
                     Profile
+                </MenuItem>
+                <MenuItem onClick={navigateToCocktailsPage}>
+                <ListItemIcon style={{ marginRight: '3px' }}>
+                        {<LocalDrinkRounded/>}
+                    </ListItemIcon>
+                    Cocktails
                 </MenuItem>
                 <MenuItem onClick={toggleColorMode}>
                     <ListItemIcon>

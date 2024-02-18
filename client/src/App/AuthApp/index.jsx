@@ -5,7 +5,7 @@ import { UserProvider } from './contexts/UserContext';
 
 const AuthenticatedApp = ({user}) => (
     <UserProvider loggedUser={user}>
-      <Column sx={{ height: 1, width: 1 }}>
+      <Column sx={{ height: 1, width: 1, overflow: "hidden" }}>
         <AppBar />
         <Row sx={{ height: 1, width: 1, padding: 1 }}>
             <Column sx={{ width: 1, height: 1 }}>
