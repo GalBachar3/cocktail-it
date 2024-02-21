@@ -1,6 +1,7 @@
 import { Route, Routes, Navigate } from 'react-router-dom';
 import Profile from '../Profile/Profile';
 import Cocktails from '../Cocktails/Cocktails';
+import Comments from '../Comments/Comments';
 
 const AuthenticatedRoutes = () => (
     <Routes>
@@ -12,6 +13,7 @@ const AuthenticatedRoutes = () => (
         </Route>
         <Route path='/cocktails'>
             <Route index element={<Cocktails/>} />
+            <Route path=':cocktailId/comments' index element={<Comments/>} />
         </Route>
         <Route path='*' element={<Navigate to="/" />} />
     </Routes>

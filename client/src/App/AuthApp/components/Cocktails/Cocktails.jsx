@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -19,8 +20,14 @@ import { Button, TextField, List, ListItem, ListItemText } from '@mui/material';
 
 
 const Cocktails = () => {
-    const cocktails = [{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: "a jksd,sddss,dsdssd,sdsdds,sdsd"}];
+    const cocktails = [{id:"3222332",name: "aaa", username:"qqqw", instructions: "put absfbas", ingredients: "a,dsdssd,sdsdds,sdsd", comments: [{username:'aaa',content: "dss"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssa,dass"}]}];
   
+
+    const navigate = useNavigate();
+    const navigateToCocktailComments = cocktail => {
+         navigate(`/cocktails/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
+    }
+
     return (
       <Box sx={{height: "100%", overflow: "auto"}}>
         {cocktails.map((cocktail, index) => (
@@ -74,7 +81,7 @@ const Cocktails = () => {
       <CardContent sx={{display: 'flex'}}>
       <Box>
         
-        <IconButton variant="plain" size="sm">
+        <IconButton onClick={() => navigateToCocktailComments(cocktail)} variant="plain" size="sm">
           <ModeCommentOutlined />
         </IconButton>
         
