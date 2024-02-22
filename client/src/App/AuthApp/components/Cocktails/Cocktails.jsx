@@ -17,7 +17,6 @@ import getAxiosClient from '../../../../axios';
 import { useQuery } from 'react-query';
 import { useUser } from '../../contexts/UserContext';
 
-
 const Cocktails = () => {
     const [comment, setComment] = useState('');
     const {user} = useUser();
@@ -26,15 +25,13 @@ const Cocktails = () => {
     const postComment =  async (cocktail) => {
       const userComment = {username: user.username, content: comment};
       cocktail.comments.push(userComment);
-      const response = await getAxiosClient().put(`api/cocktails/${cocktail._id}`, cocktail);
-
+      await getAxiosClient().put(`api/cocktails/${cocktail._id}`, cocktail);
     }
 
     const handleInputChange = (event) => {
       setComment(event.target.value);
     };
   
-
     const navigateToCocktailComments = cocktail => {
         navigate(`/cocktails/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
    }
@@ -52,7 +49,6 @@ const Cocktails = () => {
       if (error) {
         return <div>Error fetching data: {error.message}</div>;
       }
-
 
     return (
       <Box sx={{height: "100%", overflow: "auto"}}>

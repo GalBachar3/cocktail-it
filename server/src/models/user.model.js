@@ -16,6 +16,7 @@ const UserSchema = new Schema({
         require: true,
         length: { min: 8 },
     },
+    photoURL: {type: String}
 }, { timestamps: true });
 
 UserSchema.pre('save', async function (next) {

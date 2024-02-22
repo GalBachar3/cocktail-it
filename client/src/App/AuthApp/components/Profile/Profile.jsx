@@ -1,9 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Avatar, Typography, Container, Paper, TextField, Button } from '@mui/material';
 import { useUser } from '../../contexts/UserContext';
+import getAxiosClient from '../../../../axios';
 
 const Profile = () => {
-    const { user } = useUser();
+    const { user, setUser } = useUser();
     const [userInfo, setUserInfo] = useState({
       username: user?.username,
       name: user?.name,
@@ -11,10 +12,11 @@ const Profile = () => {
       photoURL: user?.photoURL || 'https://example.com/user-photo.jpg',
     });
 
-  const handleUpdate = () => {
-    // Handle the logic to update the user information (e.g., send a request to the server)
-    // For simplicity, this example just logs the updated information to the console
-    console.log('Updated User Info:', userInfo);
+  const handleUpdate = async() => {
+    await getAxiosClient().put(`api/users/${user._id}`, {...user, ...userInfo});
+    localStorage.setItem('user', JSON.stringify({...user, ...userInfo}));
+    setUser({...user, ...userInfo});
+
   };
 
   const handleChange = (event) => {

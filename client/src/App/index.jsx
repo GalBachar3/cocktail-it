@@ -6,13 +6,12 @@ import { Center } from '../Layout';
 import { useUser } from '../Providers/UserProvider';
 import AuthenticatedApp from './AuthApp';
 import UnauthenticatedApp from './UnauthApp';
-import { useQuery, QueryClientProvider, QueryClient } from 'react-query';
+import { QueryClientProvider, QueryClient } from 'react-query';
 
 const queryClient = new QueryClient();
 
 const App = () => {
   const { user } = useUser();
-
 
   return (
     <QueryClientProvider client={queryClient} contextSharing={true}>
