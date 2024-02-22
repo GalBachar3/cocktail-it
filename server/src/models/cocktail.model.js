@@ -5,6 +5,7 @@ const CocktailSchema = new Schema({
     category: { type: String, require: true },
     ingredients: { type: String, require: true },
     instructions: { type: String, require: true },
+    userId: {type: String, require: true},
     comments: {type: Array},
     user: {
         type: mongoose.Schema.Types.ObjectId,

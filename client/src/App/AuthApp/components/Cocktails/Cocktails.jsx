@@ -14,10 +14,9 @@ import Face from '@mui/icons-material/Face';
 import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
 import getAxiosClient from '../../../../axios';
-import { useQuery } from 'react-query';
 import { useUser } from '../../contexts/UserContext';
 
-const Cocktails = () => {
+const Cocktails = ({cocktails, isDeletable = false}) => {
     const [comment, setComment] = useState('');
     const {user} = useUser();
     const navigate = useNavigate();
@@ -33,26 +32,12 @@ const Cocktails = () => {
     };
   
     const navigateToCocktailComments = cocktail => {
-        navigate(`/cocktails/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
+        navigate(`/${isDeletable? 'cocktails': 'my-cocktails'}/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
    }
-    const fetchData = async () => {
-        const response = await getAxiosClient().get(`api/cocktails`);
-        return response.data;
-      };
-
-      const { data, isLoading, error } = useQuery('cocktails', fetchData);
-
-      if (isLoading) {
-        return <div>Loading...</div>;
-      }
     
-      if (error) {
-        return <div>Error fetching data: {error.message}</div>;
-      }
-
     return (
       <Box sx={{height: "100%", overflow: "auto"}}>
-        {data && data.map((cocktail, index) => (
+        {cocktails && cocktails.map((cocktail, index) => (
           <Card sx={{ m: 2 }} key={index}>
             {
                 <>

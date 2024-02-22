@@ -43,6 +43,10 @@ const UserMenu = () => {
         navigate('/cocktails');
     };
 
+    const navigateToMyCocktailsPage = () => {
+        navigate('/my-cocktails');
+    };
+
     return (
         <>
             <Tooltip title="Account settings">
@@ -62,6 +66,12 @@ const UserMenu = () => {
                         {<LocalDrinkRounded/>}
                     </ListItemIcon>
                     Cocktails
+                </MenuItem>
+                <MenuItem onClick={navigateToMyCocktailsPage}>
+                <ListItemIcon style={{ marginRight: '3px' }}>
+                        {<LocalDrinkRounded/>}
+                    </ListItemIcon>
+                    My Cocktails
                 </MenuItem>
                 <MenuItem onClick={toggleColorMode}>
                     <ListItemIcon>
