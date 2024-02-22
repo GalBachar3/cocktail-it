@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import getAxiosClient from '../../../../axios';
 import { useQuery } from 'react-query';
 import { useUser } from '../../contexts/UserContext';
@@ -6,7 +7,7 @@ import Cocktails from './Cocktails';
 
 const MyCocktails = () => {
     const {user} = useUser();
-    console.log("sdsssss", user)
+    const [_, toggle] = useState(false);
 
     const fetchData = async () => {
         const response = await getAxiosClient().get(`api/cocktails`);
@@ -25,7 +26,7 @@ const MyCocktails = () => {
 
     return (
         <>
-        {data && <Cocktails cocktails={data.filter(x=>x.userId === user._id)} />}
+        {data && <Cocktails isDeletable={true} cocktails={data.filter(x=>x.userId === user._id)} />}
         </>
     )
   };

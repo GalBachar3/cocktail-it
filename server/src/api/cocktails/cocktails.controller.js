@@ -23,15 +23,24 @@ export const createCocktail = async ({ body }, res, next) => {
 
 export const deleteCocktail = async (req, res) => {
     const cocktailId = req.params.id;
-
-    CocktailModel.findByIdAndDelete(cocktailId, (err, deletedCocktail) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
-
-        res.json();
-    });
-}
+  
+    try {
+      const deletedCocktail = await CocktailModel.findByIdAndDelete(
+        cocktailId,
+        req.body,
+        { new: true }
+      );
+  
+      if (!deletedCocktail) {
+        return res.status(404).json({ error: 'Cocktail not found' });
+      }
+  
+      res.status(200).json(deletedCocktail);
+    } catch (error) {
+      console.error('Error deleting cocktail:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
 
 export const updateCocktail = async (req, res) => {
     const cocktailId = req.params.id;

@@ -15,11 +15,13 @@ import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
 import getAxiosClient from '../../../../axios';
 import { useUser } from '../../contexts/UserContext';
+import { Delete } from '@mui/icons-material';
 
 const Cocktails = ({cocktails, isDeletable = false}) => {
     const [comment, setComment] = useState('');
     const {user} = useUser();
     const navigate = useNavigate();
+    const [cocktailsList, setCocktailsList] = useState(cocktails);
 
     const postComment =  async (cocktail) => {
       const userComment = {username: user.username, content: comment};
@@ -32,12 +34,23 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     };
   
     const navigateToCocktailComments = cocktail => {
-        navigate(`/${isDeletable? 'cocktails': 'my-cocktails'}/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
+        navigate(`/${isDeletable? 'cocktails': 'my-cocktails'}/${cocktail._id}/comments`,{state: { comments: cocktail.comments }});
    }
+
+  const deleteCocktail = async (cocktail) => {
+    try {
+      await getAxiosClient().delete(`api/cocktails/${cocktail._id}`, cocktail);
+
+      const updatedCocktailsList = cocktailsList.filter((c) => c._id !== cocktail._id);
+      setCocktailsList(updatedCocktailsList);
+    } catch (error) {
+      console.log(error);
+    }
+  };
     
     return (
       <Box sx={{height: "100%", overflow: "auto"}}>
-        {cocktails && cocktails.map((cocktail, index) => (
+        {cocktailsList && cocktailsList.map((cocktail, index) => (
           <Card sx={{ m: 2 }} key={index}>
             {
                 <>
@@ -87,13 +100,14 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
       </CardContent>
       <CardContent sx={{display: 'flex'}}>
       <Box>
-        
+      {isDeletable && <IconButton onClick={() => deleteCocktail(cocktail)} variant="plain" size="sm">
+          <Delete />
+        </IconButton>}
         <IconButton onClick={() => navigateToCocktailComments(cocktail)} variant="plain" size="sm">
         <Badge badgeContent={cocktail.comments.length} color="secondary">
           <ModeCommentOutlined />
           </Badge>
         </IconButton>
-        
       </Box>
         <IconButton size="sm" variant="plain">
           <Face />
