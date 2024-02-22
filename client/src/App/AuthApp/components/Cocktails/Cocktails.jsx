@@ -4,33 +4,46 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
-import Link from '@mui/material/Link';
 import IconButton from '@mui/material/IconButton';
 import Input from '@mui/material/Input';
 import Typography from '@mui/material/Typography';
-import MoreHoriz from '@mui/icons-material/MoreHoriz';
-import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import ModeCommentOutlined from '@mui/icons-material/ModeCommentOutlined';
-import SendOutlined from '@mui/icons-material/SendOutlined';
 import Face from '@mui/icons-material/Face';
-import BookmarkBorderRoundedIcon from '@mui/icons-material/BookmarkBorderRounded';
 import CardMedia from '@mui/material/CardMedia';
-import { height, margin } from '@mui/system';
-import { Button, TextField, List, ListItem, ListItemText } from '@mui/material';
+import { Button } from '@mui/material';
+import getAxiosClient from '../../../../axios';
+import { useQuery, QueryClientProvider, QueryClient } from 'react-query';
+//import queryClient from '../../ReactQueryUtils/query-client';  // Update the path
+
 
 
 const Cocktails = () => {
-    const cocktails = [{id:"3222332",name: "aaa", username:"qqqw", instructions: "put absfbas", ingredients: "a,dsdssd,sdsdds,sdsd", comments: [{username:'aaa',content: "dss"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssa,dass"}]}];
-  
-
     const navigate = useNavigate();
+
     const navigateToCocktailComments = cocktail => {
-         navigate(`/cocktails/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
-    }
+        navigate(`/cocktails/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
+   }
+    const fetchData = async () => {
+        const response = await getAxiosClient().get(`api/cocktails`);
+        return response.data;
+      };
+
+      const { data, isLoading, error } = useQuery('cocktails', fetchData);
+
+      if (isLoading) {
+        return <div>Loading...</div>;
+      }
+    
+      if (error) {
+        return <div>Error fetching data: {error.message}</div>;
+      }
+
+     //[{id:"3222332",name: "aaa", username:"qqqw", instructions: "put absfbas", ingredients: "a,dsdssd,sdsdds,sdsd", comments: [{username:'aaa',content: "dss"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssa,dass"}]}];
+
 
     return (
       <Box sx={{height: "100%", overflow: "auto"}}>
-        {cocktails.map((cocktail, index) => (
+        {data && data.map((cocktail, index) => (
           <Card sx={{ m: 2 }} key={index}>
             {
                 <>
@@ -108,79 +121,3 @@ const Cocktails = () => {
   };
   
 export default Cocktails;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/*const Cocktails = () => {
-    const cocktails = [{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: ["a","b"], comments:['sdds','sdds']},{name: "aaa", username:"qqqw", instructions: "put absfbas akbsfblkjsabkf jakbbsfsbasfs", ingredients: ["a jksd,sddss,dsdssd,sdsdds,sdsd"], comments:[]}];
-  
-    return (
-      <Box sx={{height: "100%"}}>
-        {cocktails.map((cocktail, index) => (
-           <Card>
-           <CardMedia
-             component="img"
-             alt={cocktail.name}
-             height="200"
-             src={cocktail.imageUrl}
-           />
-           <CardContent>
-             <Typography variant="h5" component="div">
-               {cocktail.name}
-             </Typography>
-             <Typography variant="body1" color="text.secondary">
-               {cocktail.instructions}
-             </Typography>
-             <Typography variant="h6" component="div" mt={2}>
-               Ingredients:
-             </Typography>
-             <List>
-               {cocktail.ingredients.map((ingredient, index) => (
-                 <ListItem key={index}>
-                   <ListItemText primary={ingredient} />
-                 </ListItem>
-               ))}
-             </List>
-             <TextField
-               label="Add a comment"
-               variant="outlined"
-               fullWidth
-               margin="normal"
-             />
-             <Button variant="contained" color="primary" fullWidth>
-               Add Comment
-             </Button>
-             <Typography variant="h6" component="div" mt={2}>
-               Existing Comments:
-             </Typography>
-             <List>
-               {cocktail.comments.map((comment, index) => (
-                 <ListItem key={index}>
-                   <ListItemText primary={comment} />
-                 </ListItem>
-               ))}
-             </List>
-           </CardContent>
-         </Card>
-        ))}
-      </Box>
-    );
-  };
-  
-export default Cocktails;*/
