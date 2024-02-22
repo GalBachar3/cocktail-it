@@ -2,6 +2,7 @@ import * as React from 'react';
 import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
+import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -107,7 +108,9 @@ const Cocktails = () => {
       <Box>
         
         <IconButton onClick={() => navigateToCocktailComments(cocktail)} variant="plain" size="sm">
+        <Badge badgeContent={cocktail.comments.length} color="secondary">
           <ModeCommentOutlined />
+          </Badge>
         </IconButton>
         
       </Box>
