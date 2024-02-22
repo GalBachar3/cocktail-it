@@ -1,4 +1,5 @@
 import * as React from 'react';
+import {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -12,13 +13,26 @@ import Face from '@mui/icons-material/Face';
 import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
 import getAxiosClient from '../../../../axios';
-import { useQuery, QueryClientProvider, QueryClient } from 'react-query';
-//import queryClient from '../../ReactQueryUtils/query-client';  // Update the path
-
+import { useQuery } from 'react-query';
+import { useUser } from '../../contexts/UserContext';
 
 
 const Cocktails = () => {
+    const [comment, setComment] = useState('');
+    const {user} = useUser();
     const navigate = useNavigate();
+
+    const postComment =  async (cocktail) => {
+      const userComment = {username: user.username, content: comment};
+      cocktail.comments.push(userComment);
+      const response = await getAxiosClient().put(`api/cocktails/${cocktail._id}`, cocktail);
+
+    }
+
+    const handleInputChange = (event) => {
+      setComment(event.target.value);
+    };
+  
 
     const navigateToCocktailComments = cocktail => {
         navigate(`/cocktails/${cocktail.id}/comments`,{state: { comments: cocktail.comments }});
@@ -37,8 +51,6 @@ const Cocktails = () => {
       if (error) {
         return <div>Error fetching data: {error.message}</div>;
       }
-
-     //[{id:"3222332",name: "aaa", username:"qqqw", instructions: "put absfbas", ingredients: "a,dsdssd,sdsdds,sdsd", comments: [{username:'aaa',content: "dss"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssadass"},{username:'aasaasaa',content: "dssa,dass"}]}];
 
 
     return (
@@ -103,12 +115,14 @@ const Cocktails = () => {
           <Face />
         </IconButton>
         <Input
+        value={comment}
+        onChange={handleInputChange}
           variant="plain"
           size="sm"
           placeholder="Add a comment…"
           sx={{ flex: 1, px: 0, '--Input-focusedThickness': '0px' }}
         />
-        <Button underline="none" role="button">
+        <Button onClick={()=> postComment(cocktail)} underline="none" role="button">
           Post
         </Button>
       </CardContent>
