@@ -15,7 +15,7 @@ import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
 import getAxiosClient from '../../../../axios';
 import { useUser } from '../../contexts/UserContext';
-import { Delete } from '@mui/icons-material';
+import { Delete, Edit } from '@mui/icons-material';
 
 const Cocktails = ({cocktails, isDeletable = false}) => {
     const [comment, setComment] = useState('');
@@ -34,8 +34,7 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     };
   
     const navigateToCocktailComments = cocktail => {
-        navigate(`/${isDeletable? 'cocktails': 'my-cocktails'}/${cocktail._id}/comments`,{state: { comments: cocktail.comments }});
-   }
+      navigate(`/${isDeletable? 'cocktails': 'my-cocktails'}/${cocktail._id}/comments`,{state: { comments: cocktail.comments }});   }
 
   const deleteCocktail = async (cocktail) => {
     try {
@@ -47,6 +46,10 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
       console.log(error);
     }
   };
+
+  const updateCocktail = (cocktail) => {
+    navigate(`/my-cocktails/${cocktail._id}/edit-cocktail`,{state: { cocktail: cocktail }});
+  }
     
     return (
       <Box sx={{height: "100%", overflow: "auto"}}>
@@ -102,6 +105,9 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
       <Box>
       {isDeletable && <IconButton onClick={() => deleteCocktail(cocktail)} variant="plain" size="sm">
           <Delete />
+        </IconButton>}
+        {isDeletable && <IconButton onClick={() => updateCocktail(cocktail)} variant="plain" size="sm">
+          <Edit />
         </IconButton>}
         <IconButton onClick={() => navigateToCocktailComments(cocktail)} variant="plain" size="sm">
         <Badge badgeContent={cocktail.comments.length} color="secondary">

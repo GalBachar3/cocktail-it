@@ -4,6 +4,8 @@ import MyCocktails from "../Cocktails/MyCocktails";
 import Comments from '../Comments/Comments';
 import AllCocktails from '../Cocktails/AllCocktails';
 import AddCocktail from "../AddEditCocktail/AddCocktail";
+import EditCocktail from "../AddEditCocktail/EditCocktail";
+
 
 const AuthenticatedRoutes = () => (
     <Routes>
@@ -20,6 +22,7 @@ const AuthenticatedRoutes = () => (
         <Route path='/my-cocktails'>
             <Route index element={<MyCocktails/>} />
             <Route path=':cocktailId/comments' index element={<Comments/>} />
+            <Route path=':cocktailId/edit-cocktail' index element={<EditCocktail/>} />
         </Route>
         <Route path='/add-cocktail'>
             <Route index element={<AddCocktail/>} />

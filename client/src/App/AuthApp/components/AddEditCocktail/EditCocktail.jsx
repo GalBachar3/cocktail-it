@@ -6,16 +6,18 @@ import UpdateIcon from '@mui/icons-material/Update';
 import getAxiosClient from '../../../../axios'; 
 import { useUser } from '../../contexts/UserContext';
 import AddEditCocktail from './AddEditCocktail';
+import { useLocation } from 'react-router-dom';
 
-const AddCocktail = () => {
- 
-  const onSubmitHandler = async(newCocktail) => {
-    await getAxiosClient().post(`api/cocktails`,{...newCocktail, comments:[]});
+
+const EditCocktail = () => {
+  const location = useLocation();
+  const onSubmitHandler = async(updatedCocktail) => {
+    await getAxiosClient().put(`api/cocktails/${updatedCocktail._id}`, updatedCocktail);
   };
 
   return (
-    <AddEditCocktail onSubmitHandler={onSubmitHandler}></AddEditCocktail>
+    <AddEditCocktail cocktail={location.state ? location.state.cocktail : null} onSubmitHandler={onSubmitHandler}></AddEditCocktail>
       );
 };
 
-export default AddCocktail;
+export default EditCocktail;
