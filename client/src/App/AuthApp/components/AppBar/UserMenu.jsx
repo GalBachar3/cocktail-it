@@ -1,4 +1,4 @@
-import { LightMode, Logout, ModeNight, LocalDrinkRounded } from '@mui/icons-material';
+import { LightMode, Logout, ModeNight, LocalDrinkRounded, PlusOne } from '@mui/icons-material';
 import { Avatar, IconButton, ListItemIcon, Menu, MenuItem, Tooltip, useTheme } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
@@ -47,6 +47,10 @@ const UserMenu = () => {
         navigate('/my-cocktails');
     };
 
+    const navigateToAddCocktailPage = () => {
+        navigate('/add-cocktail');
+    };
+
     return (
         <>
             <Tooltip title="Account settings">
@@ -72,6 +76,12 @@ const UserMenu = () => {
                         {<LocalDrinkRounded/>}
                     </ListItemIcon>
                     My Cocktails
+                </MenuItem>
+                <MenuItem onClick={navigateToAddCocktailPage}>
+                <ListItemIcon style={{ marginRight: '3px' }}>
+                        {<PlusOne/>}
+                    </ListItemIcon>
+                    Add Cocktail
                 </MenuItem>
                 <MenuItem onClick={toggleColorMode}>
                     <ListItemIcon>

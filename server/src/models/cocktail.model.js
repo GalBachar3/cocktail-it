@@ -1,17 +1,13 @@
 import mongoose, { Schema, model } from 'mongoose';
 
 const CocktailSchema = new Schema({
-    name: { type: String, require: true },
-    category: { type: String, require: true },
-    ingredients: { type: String, require: true },
-    instructions: { type: String, require: true },
-    userId: {type: String, require: true},
-    comments: {type: Array},
-    user: {
-        type: mongoose.Schema.Types.ObjectId,
-        required: true,
-        ref: "User",
-      }
+    name: { type: String, required: true },
+    category: { type: String, required: true },
+    ingredients: { type: String, required: true },
+    instructions: { type: String, required: true },
+    userId: { type: String, required: true },
+    username: { type: String, required: true },
+    comments: { type: Array }
 }, { timestamps: true });
 
 export const CocktailModel = model('Cocktail', CocktailSchema);

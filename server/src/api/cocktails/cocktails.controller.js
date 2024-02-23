@@ -13,7 +13,8 @@ export const getCocktails = async (req, res, next) => {
 export const createCocktail = async ({ body }, res, next) => {
     try {
         const newCocktail = new CocktailModel(body);
-        newCocktail.save();
+        console.log(newCocktail)
+        await newCocktail.save();
 
         return res.status(200).json(newCocktail);
     } catch (error) {
