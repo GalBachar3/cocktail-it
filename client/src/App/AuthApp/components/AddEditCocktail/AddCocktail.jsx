@@ -43,8 +43,8 @@ const CocktailForm = ({ cocktail, onSubmit }) => {
             <Grid item xs={12}>
               <TextField
                 fullWidth
-                label="Catagory"
-                {...register('catagory')}
+                label="Category"
+                {...register('category')}
                 required
               />
             </Grid>

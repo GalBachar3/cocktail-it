@@ -10,17 +10,20 @@ export const getCocktails = async (req, res, next) => {
     }
 };
 
-export const createCocktail = async ({ body }, res, next) => {
+export const createCocktail = async (req, res) => {
     try {
-        const newCocktail = new CocktailModel(body);
-        console.log(newCocktail)
-        await newCocktail.save();
-
-        return res.status(200).json(newCocktail);
+      // Create a new CocktailModel instance based on the request body
+      const newCocktail = new CocktailModel(req.body);
+  
+      // Save the new cocktail to the database
+      const savedCocktail = await newCocktail.save();
+  
+      res.status(201).json(savedCocktail);
     } catch (error) {
-        next(error)
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
     }
-};
+  };
 
 export const deleteCocktail = async (req, res) => {
     const cocktailId = req.params.id;
