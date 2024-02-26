@@ -3,7 +3,9 @@ import { useForm } from 'react-hook-form';
 import { Card, CardContent, TextField, Button, Grid, Input, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
+import ShuffleIcon from '@mui/icons-material/Shuffle';
 import getAxiosClient from '../../../../axios'; 
+import { getRandomCocktail } from '../../../../axios/cocktail';
 import { useUser } from '../../contexts/UserContext';
 
 const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
@@ -14,6 +16,14 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
     await onSubmitHandler({...data,username: user.username, userId: user._id});
     reset();
   };
+
+  const generateRandomCocktail = async () => {
+    const randomCocktail = await getRandomCocktail();
+
+    Object.entries(randomCocktail).forEach(([key, value]) => {
+      setValue(key, value);
+    });
+  }
 
   React.useEffect(() => {
     if (cocktail) {
@@ -84,6 +94,19 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
                 {cocktail ? 'Update' : 'Insert'}
               </Button>
             </Grid>
+            {
+              !cocktail && <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Button
+                variant="contained"
+                color="primary"
+                startIcon={<ShuffleIcon />}
+                sx={{ width: '80%', mt: 2, mb: 2, mx: 'auto' }}
+                onClick={async () => {await generateRandomCocktail()}}
+              >
+                Generate random cocktail
+              </Button>
+            </Grid>
+            }
           </Grid>
         </form>
       </CardContent>
