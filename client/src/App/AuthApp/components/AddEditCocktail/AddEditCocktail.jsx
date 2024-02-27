@@ -1,4 +1,5 @@
 import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Card, CardContent, TextField, Button, Grid, Input, Typography } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -7,21 +8,75 @@ import ShuffleIcon from '@mui/icons-material/Shuffle';
 import getAxiosClient from '../../../../axios'; 
 import { getRandomCocktail } from '../../../../axios/cocktail';
 import { useUser } from '../../contexts/UserContext';
+import axios from 'axios';
 
 const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
   const {user} = useUser();
-  const { register, handleSubmit, setValue, reset } = useForm();
+  const { register, handleSubmit, setValue, reset, watch } = useForm();
+  const image = watch('image');
+  const [randomImageUrl, setRandomImageUrl] = useState('');
 
-  const onSubmit = async(data) => {
-    await onSubmitHandler({...data,username: user.username, userId: user._id});
-    reset();
+  const handleImageChange = (event) => {
+    setValue('image', event.target.files[0]);
+    setRandomImageUrl('');
   };
+
+  const getImageSrc = () => {
+    if(!!cocktail && image === cocktail.image){
+      return cocktail.image;
+    }
+    if(randomImageUrl !== ''){
+      return randomImageUrl;
+    }
+    if(!!image){
+      return URL.createObjectURL(image);
+    }
+  }
+
+  const onSubmit = async (data) => {
+    const imageFormData = new FormData();
+    imageFormData.append('image', image);
+  
+    try {      
+      let imageUrl = cocktail? cocktail.image : '';
+        if(image && cocktail?.image !== image){
+          //TODO change the url
+          const response = await axios.post('http://localhost:3000/api/upload', imageFormData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+          });
+          
+          imageUrl = response.data.imageUrl;
+        }
+
+      await onSubmitHandler({
+        ...data,
+        username: user.username,
+        userId: user._id,
+        image: imageUrl
+      });
+  
+      reset();
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
+  
 
   const generateRandomCocktail = async () => {
     const randomCocktail = await getRandomCocktail();
 
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const dataUrl = reader.result;
+      setRandomImageUrl(dataUrl);
+    };
+    reader.readAsDataURL(randomCocktail.image);
+
     Object.entries(randomCocktail).forEach(([key, value]) => {
-      setValue(key, value);
+      
+        setValue(key, value);
+      
     });
   }
 
@@ -34,13 +89,39 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
   }, [cocktail, setValue]);
 
   return (
-    <Card sx={{ maxWidth: 400, margin: 'auto', height: '100%', boxShadow: 4 }}>
+    <Card sx={{ maxWidth: 400, margin: 'auto', height: '100%', overflow: 'auto',boxShadow: 4 }}>
       <CardContent>
         <Typography variant="h5" align="center" gutterBottom>
           {cocktail ? 'Update Cocktail' : 'Create Cocktail'}
         </Typography>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
+
+
+          <Input
+            type="file"
+            {...register('image')}
+            onChange={handleImageChange}
+            style={{ marginBottom: '10px' }}
+          />
+          
+          <div style={{ marginTop: '20px' }}>
+          { image && (
+            <img
+              src={getImageSrc()}
+              alt="Uploaded Image"
+              style={{ maxWidth: '100%', maxHeight: '300px' }}
+            />
+          )}
+          {/* {cocktail?.image && (
+            <img
+              src={cocktail.image}
+              style={{ maxWidth: '100%', maxHeight: '300px' }}
+            />
+          )} */}
+        </div>
+
+
             <Grid item xs={12}>
               <TextField
                 fullWidth

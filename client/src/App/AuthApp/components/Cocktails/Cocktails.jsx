@@ -52,9 +52,9 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
   }
     
     return (
-      <Box sx={{height: "100%", overflow: "auto"}}>
+      <Box sx={{display:'flex', flexDirection: 'column', alignItems:"center"}}>
         {cocktailsList && cocktailsList.map((cocktail, index) => (
-          <Card sx={{ m: 2 }} key={index}>
+          <Card sx={{ m: 2, width: "500px" }} key={index}>
             {
                 <>
                   <CardContent sx={{display: 'flex', justifyContent: 'center'}}>
@@ -62,12 +62,12 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
                          {cocktail.name}
                     </Typography>
                   </CardContent>
-                  {cocktail.imageUrl && 
+                  {cocktail.image && 
                   <CardMedia
-                    component="img"
-                    height="194"
-                    image={cocktail.imageUrl}
-                    alt="Paella dish"
+                  component="img"
+                  height="194"
+                  src={cocktail.image}
+                  sx={{ objectFit: "cover" }}
                 />}
 
 

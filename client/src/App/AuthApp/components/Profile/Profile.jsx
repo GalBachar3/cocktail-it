@@ -1,22 +1,37 @@
 import React, { useState, useEffect } from 'react';
-import { Avatar, Typography, Container, Paper, TextField, Button } from '@mui/material';
+import { Avatar, Typography, Container, Paper, TextField, Button, Input, InputLabel, InputAdornment } from '@mui/material';
 import { useUser } from '../../contexts/UserContext';
 import getAxiosClient from '../../../../axios';
+import axios from 'axios';
+
 
 const Profile = () => {
-    const { user, setUser } = useUser();
-    const [userInfo, setUserInfo] = useState({
-      username: user?.username,
-      name: user?.name,
-      // Add the URL of the user's photo
-      photoURL: user?.photoURL || 'https://example.com/user-photo.jpg',
-    });
+  const { user, setUser } = useUser();
+  const [userInfo, setUserInfo] = useState({
+    username: user?.username,
+    name: user?.name,
+    image: user?.image || 'https://example.com/user-photo.jpg',
+  });
 
-  const handleUpdate = async() => {
-    await getAxiosClient().put(`api/users/${user._id}`, {...user, ...userInfo});
-    localStorage.setItem('user', JSON.stringify({...user, ...userInfo}));
-    setUser({...user, ...userInfo});
+  console.log(user)
+  const [imageFile, setImageFile] = useState(null);
 
+  const handleUpdate = async () => {
+    const formData = new FormData();
+    formData.append('image', imageFile);
+    let imageUrl = user.image;
+        if(imageFile && user?.image !== imageFile){
+          const response = await axios.post('http://localhost:3000/api/upload', formData, {
+            headers: {'Content-Type': 'multipart/form-data'}
+          });
+          
+          imageUrl = response.data.imageUrl;
+        }
+
+
+        await getAxiosClient().put(`api/users/${user._id}`, {...user, ...userInfo, image: imageUrl});
+        localStorage.setItem('user', JSON.stringify({...user, ...userInfo, image: imageUrl}));
+        setUser({...user, ...userInfo});
   };
 
   const handleChange = (event) => {
@@ -27,10 +42,29 @@ const Profile = () => {
     }));
   };
 
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    setImageFile(file);
+    const reader = new FileReader();
+    reader.onload = () => {
+      setUserInfo((prevUserInfo) => ({
+        ...prevUserInfo,
+        image: reader.result,
+      }));
+    };
+    reader.readAsDataURL(file);
+  };
+
   return (
     <Container maxWidth="sm">
       <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', textAlign: 'center' }}>
-        <Avatar alt={userInfo.username} src={userInfo.photoURL} sx={{ width: 100, height: 100, marginBottom: 2 }} />
+      <Input
+          id="image-input"
+          type="file"
+          onChange={handleImageChange}
+          inputProps={{ accept: 'image/*' }}
+        />
+        <Avatar alt={userInfo.username} src={userInfo.image} sx={{ width: 100, height: 100, marginBottom: 2 }} />
         <Typography variant="h4" gutterBottom>
           {userInfo.username}
         </Typography>

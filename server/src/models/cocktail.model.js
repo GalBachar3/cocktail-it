@@ -6,6 +6,7 @@ const CocktailSchema = new Schema({
     ingredients: { type: String, required: true },
     instructions: { type: String, required: true },
     userId: { type: String, required: true },
+    image: {type:String},
     username: { type: String, required: true },
     comments: { type: Array }
 }, { timestamps: true });
