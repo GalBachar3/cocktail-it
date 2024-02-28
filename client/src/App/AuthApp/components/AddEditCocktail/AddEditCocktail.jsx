@@ -5,7 +5,6 @@ import { Card, CardContent, TextField, Button, Grid, Input, Typography } from '@
 import AddIcon from '@mui/icons-material/Add';
 import UpdateIcon from '@mui/icons-material/Update';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
-import getAxiosClient from '../../../../axios'; 
 import { getRandomCocktail } from '../../../../axios/cocktail';
 import { useUser } from '../../contexts/UserContext';
 import axios from 'axios';
@@ -64,8 +63,6 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
 
   const generateRandomCocktail = async () => {
     const randomCocktail = await getRandomCocktail();
-
-
     const reader = new FileReader();
     reader.onload = () => {
       const dataUrl = reader.result;
@@ -113,15 +110,7 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               style={{ maxWidth: '100%', maxHeight: '300px' }}
             />
           )}
-          {/* {cocktail?.image && (
-            <img
-              src={cocktail.image}
-              style={{ maxWidth: '100%', maxHeight: '300px' }}
-            />
-          )} */}
         </div>
-
-
             <Grid item xs={12}>
               <TextField
                 fullWidth
@@ -154,16 +143,6 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
                 required
               />
             </Grid>
-            {/* <Grid item xs={12}>
-              <label htmlFor="image">Image</label>
-              <Input
-                type="file"
-                id="image"
-                {...register('image')}
-                fullWidth
-                required
-              />
-            </Grid> */}
             <Grid item xs={12} sx={{ textAlign: 'center' }}>
               <Button
                 type="submit"

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { comparePaswords } from '../services/hashPassword.js';
 import { getAccessToken, getDecodedToken } from '../services/token.js';
 import { UserModel } from '../models/user.model.js';
+import { OAuth2Client } from 'google-auth-library';
 
 const findUserByUsername = async username => await UserModel.findOne({ username });
 
@@ -65,48 +66,48 @@ export const authUser = async ({ headers: { authorization } }, res, next) => {
     }
 };
 
-// export const googleAuth = async (req, res, next) => {
-//     res.header('Access-Control-Aloow-Origin', 'http://localhost:5173/');
-//     res.header('Referrer-Policy', 'no-referrer-when-downgrade');
-
-//     const redirectUrl = 'http://127.0.0.1:3000/oauth';
-//     const oAuth2Client = new OAuth2Client(
-//         process.env.CLIENT_ID,
-//         process.env.CLIENT_SECRET,
-//         redirectUrl
-//     );
-
-//     const authorizeUrl = oAuth2Client.generateAuthUrl({
-//         access_type: 'offline',
-//         scope: 'https://www.googleapis.com/auth/userinfo.profile openid',
-//         prompt: 'consent'
-//     })
-
-//     res.json({ url: authorizeUrl })
-// };
-
-// export const getUserData = async access_token => {
-//     const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token${access_token}`);
-//     const data = await response.json();
-//     console.log('data', data);
-// };
-
-// export const googleGet = async (req, res, next) => {
-//     const code = req.query.code;
-//     try {
-//         const redirectUrl = 'http://127.0.0.1:3000/oauth';
-//         const oAuth2Client = new OAuth2Client(
-//             process.env.CLIENT_ID,
-//             process.env.CLIENT_SECRET,
-//             redirectUrl
-//         );
-//         const res = await oAuth2Client.getToken(code);
-//         await oAuth2Client.setCredentials(res.token);
-//         console.log('token acquired');
-//         const user = oAuth2Client.credentials;
-//         console.log('credentials', user);
-//         await getUserData(user.access_token)
-//     } catch (e) {
-//         console.log('Error with signing in with Google');
+// const generateTokens = async (user) => {
+//     const accessToken = jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: process.env.JWT_EXPIRATION });
+//     const refreshToken = jwt.sign({ _id: user._id }, process.env.JWT_REFRESH_SECRET);
+//     if (user.refreshTokens == null) {
+//         user.refreshTokens = [refreshToken];
+//     } else {
+//         user.refreshTokens.push(refreshToken);
 //     }
+//     await user.save();
+//     return {
+//         'accessToken': accessToken,
+//         'refreshToken': refreshToken
+//     };
 // }
+
+const client = new OAuth2Client();
+export const googleSignin = async (req, res) => {
+    console.log("dsdsdssd",req.body);
+    try {
+        const ticket = await client.verifyIdToken({
+            idToken: req.body.credential,
+            audience: process.env.GOOGLE_CLIENT_ID,
+        });
+        const payload = ticket.getPayload();
+        const email = payload?.email;
+        if (email != null) {
+            let user = await UserModel.findOne({ 'email': email });
+            if (user == null) {
+                console.log('sss',email)
+                user = await UserModel.create(
+                    {
+                        'name' : '',
+                        'username': '',
+                        'email': email,
+                        'password': '0',
+                        'image': payload?.picture
+                    });
+            }
+            //const tokens = await generateTokens(user)
+            return res.json({ accessToken: getAccessToken(user), user });
+        }
+    } catch (err) {
+        return res.status(400).send(err.message);
+    }
+}

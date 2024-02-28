@@ -16,6 +16,7 @@ const UserSchema = new Schema({
         require: true,
         length: { min: 8 },
     },
+    email: {type: String},
     image: {type: String}
 }, { timestamps: true });
 

@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Avatar, Typography, Container, Paper, TextField, Button, Input, InputLabel, InputAdornment } from '@mui/material';
+import React, { useState } from 'react';
+import { Avatar, Typography, Container, Paper, TextField, Button, Input } from '@mui/material';
 import { useUser } from '../../contexts/UserContext';
 import getAxiosClient from '../../../../axios';
 import axios from 'axios';
@@ -13,7 +13,6 @@ const Profile = () => {
     image: user?.image || 'https://example.com/user-photo.jpg',
   });
 
-  console.log(user)
   const [imageFile, setImageFile] = useState(null);
 
   const handleUpdate = async () => {
@@ -27,7 +26,6 @@ const Profile = () => {
           
           imageUrl = response.data.imageUrl;
         }
-
 
         await getAxiosClient().put(`api/users/${user._id}`, {...user, ...userInfo, image: imageUrl});
         localStorage.setItem('user', JSON.stringify({...user, ...userInfo, image: imageUrl}));

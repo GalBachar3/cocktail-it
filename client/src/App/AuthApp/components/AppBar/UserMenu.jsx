@@ -6,9 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import stringToColor from 'string-to-color';
 import { useColorMode } from '../../../../Providers/ThemeProvider';
 import { useUser } from '../../../../Providers/UserProvider';
-import { padding } from '@mui/system';
 
-const getInitials = fullName => fullName.trim().split(/\s+/).map(name => name[0].toUpperCase()).join('').slice(0, 3);
+const getInitials = fullName => fullName === ''? '' : fullName.trim().split(/\s+/).map(name => name[0].toUpperCase()).join('').slice(0, 3);
 
 const UserMenu = () => {
     const [anchorEl, setAnchorEl] = useState(null);

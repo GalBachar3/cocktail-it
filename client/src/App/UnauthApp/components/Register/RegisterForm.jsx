@@ -47,6 +47,19 @@ const RegisterForm = () => {
                     variant='standard'
                     error={!!errors.username}
                     helperText={errors.username ? errors.username.message : ''}
+                    sx={{
+                        maxWidth: 220,
+                        '& .MuiFormHelperText-root': {
+                            maxWidth: 220,
+                        }
+                    }}
+                />
+                 <TextField
+                    {...register('email')}
+                    label='Email'
+                    variant='standard'
+                    error={!!errors.email}
+                    helperText={errors.email ? errors.email.message : ''}
                     InputProps={{
                         endAdornment: <InputAdornment position='start'>
                             <Email />

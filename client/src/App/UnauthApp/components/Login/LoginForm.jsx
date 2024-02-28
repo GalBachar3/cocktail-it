@@ -3,14 +3,13 @@ import { Email, Key } from '@mui/icons-material';
 import { Button, Checkbox, FormControlLabel, InputAdornment, TextField } from '@mui/material';
 import { GoogleLogin } from '@react-oauth/google';
 import { useMutation } from '@tanstack/react-query';
-import { jwtDecode } from 'jwt-decode';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Center, Column } from '../../../../Layout';
 import { useUser } from '../../../../Providers/UserProvider';
-import { loginUserFn } from '../../../../axios/auth';
+import { loginUserFn, googleSignin } from '../../../../axios/auth';
 import { loginFormSchema } from './validationSchema';
 
 const LoginForm = () => {
@@ -25,7 +24,7 @@ const LoginForm = () => {
             localStorage.setItem('token', accessToken);
             localStorage.setItem('user', JSON.stringify(user));
             setUser(user);
-            navigate('/');
+            navigate('/cocktails');
 
             toast.success('Logged In Successfully!');
         },
@@ -34,9 +33,23 @@ const LoginForm = () => {
         }
     });
 
-    const onGoogleSuccess = (CredentialResponse) => {
-        const user = jwtDecode(CredentialResponse.credential);
-        console.log(user);
+    const onGoogleLoginSuccess = async (credentialResponse) => {
+        console.log(credentialResponse)
+        try {
+            const res = await googleSignin(credentialResponse)
+            localStorage.setItem('token', res.accessToken);
+            localStorage.setItem('user', JSON.stringify(res.user));
+            setUser(res.user);
+            navigate('/cocktails');
+
+            toast.success('Logged In Successfully!');
+        } catch (e) {
+            console.log(e)
+        }
+    }
+
+    const onGoogleLoginFailure = () => {
+        console.log("Google login failed")
     }
 
     const changeRememberMeCheckbox = () => {
@@ -80,7 +93,7 @@ const LoginForm = () => {
                     />
                 </Center>
                 <Button type='submit' variant='contained'>Login</Button>
-                <GoogleLogin onSuccess={onGoogleSuccess} onError={e => { toast.error(e.message) }} />
+                <GoogleLogin onSuccess={onGoogleLoginSuccess} onError={onGoogleLoginFailure} />
             </Column>
         </form>
     );

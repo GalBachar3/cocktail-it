@@ -39,7 +39,7 @@ const storage = multer.diskStorage({
     if (req.file) {
       const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
       res.json({ imageUrl });
-    } else {
+    } else {  
       res.status(500).json({ error: 'Error uploading image' });
     }
   });
