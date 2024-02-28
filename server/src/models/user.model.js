@@ -17,7 +17,10 @@ const UserSchema = new Schema({
         length: { min: 8 },
     },
     email: {type: String},
-    image: {type: String}
+    image: {type: String},
+    refreshTokens: {
+        type: [String], default: []
+    }
 }, { timestamps: true });
 
 UserSchema.pre('save', async function (next) {

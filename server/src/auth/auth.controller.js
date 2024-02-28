@@ -1,7 +1,7 @@
 import createHttpError from 'http-errors';
 import _ from 'lodash';
 import { comparePaswords } from '../services/hashPassword.js';
-import { getAccessToken, getDecodedToken } from '../services/token.js';
+import { getAccessToken, getDecodedToken, getRefreshToken } from '../services/token.js';
 import { UserModel } from '../models/user.model.js';
 import { OAuth2Client } from 'google-auth-library';
 
@@ -33,7 +33,15 @@ export const loginUser = async ({ body: { username, password } }, res, next) => 
             const match = await comparePaswords(password, user.password);
 
             if (match) {
-                return res.json({ accessToken: getAccessToken(user), user });
+                const refreshToken = getRefreshToken(user);
+                if (!user.refreshTokens) {
+                    user.refreshTokens = [refreshToken];
+                } else {
+                    user.refreshTokens.push(refreshToken);
+                }
+                await user.save();
+
+                return res.json({ accessToken: getAccessToken(user), refreshToken, user});
             }
             throw createHttpError(400, 'Invalid Credentials');
         }
@@ -73,6 +81,106 @@ export const authUser = async ({ headers: { authorization } }, res, next) => {
 //         user.refreshTokens = [refreshToken];
 //     } else {
 //         user.refreshTokens.push(refreshToken);
+
+export const refreshToken = (req, res) => {
+    const authHeader = req.headers['authorization'];
+    //TODO: debug here
+    const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    if (refreshToken == null) return res.sendStatus(401);
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
+        if (err) {
+            console.log(err);
+            return res.sendStatus(401);
+        }
+        try {
+            const userDb = await UserModel.findOne({ '_id': user._id });
+            if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
+                userDb.refreshTokens = [];
+                await userDb.save();
+                return res.sendStatus(401);
+            }
+            const accessToken = getAccessToken(user)
+            const newRefreshToken = getRefreshToken(user)
+            userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
+            userDb.refreshTokens.push(newRefreshToken);
+            await userDb.save();
+            return res.status(200).send({
+                'accessToken': accessToken,
+                'refreshToken': refreshToken
+            });
+        } catch (err) {
+            res.sendStatus(401).send(err.message);
+        }
+    });
+}
+
+export const logout = async (req, res) => {
+    const authHeader = req.headers['authorization'];
+    const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
+    if (refreshToken == null) return res.sendStatus(401);
+    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
+        console.log(err);
+        if (err) return res.sendStatus(401);
+        try {
+            const userDb = await UserModel.findOne({ '_id': user._id });
+            if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
+                userDb.refreshTokens = [];
+                await userDb.save();
+                return res.sendStatus(401);
+            } else {
+                userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
+                await userDb.save();
+                return res.sendStatus(200);
+            }
+        } catch (err) {
+            res.sendStatus(401).send(err.message);
+        }
+    });
+}
+
+// export const googleAuth = async (req, res, next) => {
+//     res.header('Access-Control-Aloow-Origin', 'http://localhost:5173/');
+//     res.header('Referrer-Policy', 'no-referrer-when-downgrade');
+
+//     const redirectUrl = 'http://127.0.0.1:3000/oauth';
+//     const oAuth2Client = new OAuth2Client(
+//         process.env.CLIENT_ID,
+//         process.env.CLIENT_SECRET,
+//         redirectUrl
+//     );
+
+//     const authorizeUrl = oAuth2Client.generateAuthUrl({
+//         access_type: 'offline',
+//         scope: 'https://www.googleapis.com/auth/userinfo.profile openid',
+//         prompt: 'consent'
+//     })
+
+//     res.json({ url: authorizeUrl })
+// };
+
+// export const getUserData = async access_token => {
+//     const response = await fetch(`https://www.googleapis.com/oauth2/v3/userinfo?access_token${access_token}`);
+//     const data = await response.json();
+//     console.log('data', data);
+// };
+
+// export const googleGet = async (req, res, next) => {
+//     const code = req.query.code;
+//     try {
+//         const redirectUrl = 'http://127.0.0.1:3000/oauth';
+//         const oAuth2Client = new OAuth2Client(
+//             process.env.CLIENT_ID,
+//             process.env.CLIENT_SECRET,
+//             redirectUrl
+//         );
+//         const res = await oAuth2Client.getToken(code);
+//         await oAuth2Client.setCredentials(res.token);
+//         console.log('token acquired');
+//         const user = oAuth2Client.credentials;
+//         console.log('credentials', user);
+//         await getUserData(user.access_token)
+//     } catch (e) {
+//         console.log('Error with signing in with Google');
 //     }
 //     await user.save();
 //     return {
