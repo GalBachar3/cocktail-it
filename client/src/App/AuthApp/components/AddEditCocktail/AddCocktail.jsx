@@ -1,11 +1,11 @@
 import React from 'react';
-import getAxiosClient from '../../../../axios'; 
+import {getClient} from '../../../../axios'; 
 import AddEditCocktail from './AddEditCocktail';
 
 const AddCocktail = () => {
  
   const onSubmitHandler = async(newCocktail) => {
-    await getAxiosClient().post(`api/cocktails`,{...newCocktail, comments:[]});
+    await getClient().post(`api/cocktails`,{...newCocktail, comments:[]});
   };
 
   return (

@@ -82,7 +82,7 @@ export const authUser = async ({ headers: { authorization } }, res, next) => {
 //     } else {
 //         user.refreshTokens.push(refreshToken);
 
-export const refreshToken = (req, res) => {
+export const refresh = (req, res) => {
     const authHeader = req.headers['authorization'];
     //TODO: debug here
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>

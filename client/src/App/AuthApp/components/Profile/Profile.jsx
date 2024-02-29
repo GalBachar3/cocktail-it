@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import { Avatar, Typography, Container, Paper, TextField, Button, Input } from '@mui/material';
 import { useUser } from '../../contexts/UserContext';
-import getAxiosClient from '../../../../axios';
-import axios from 'axios';
-
+import {getClient} from '../../../../axios';
 
 const Profile = () => {
   const { user, setUser } = useUser();
@@ -20,14 +18,14 @@ const Profile = () => {
     formData.append('image', imageFile);
     let imageUrl = user.image;
         if(imageFile && user?.image !== imageFile){
-          const response = await axios.post('http://localhost:3000/api/upload', formData, {
+          const response = await getClient().post('http://localhost:3000/api/upload', formData, {
             headers: {'Content-Type': 'multipart/form-data'}
           });
           
           imageUrl = response.data.imageUrl;
         }
 
-        await getAxiosClient().put(`api/users/${user._id}`, {...user, ...userInfo, image: imageUrl});
+        await getClient().put(`api/users/${user._id}`, {...user, ...userInfo, image: imageUrl});
         localStorage.setItem('user', JSON.stringify({...user, ...userInfo, image: imageUrl}));
         setUser({...user, ...userInfo});
   };

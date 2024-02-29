@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {useState} from 'react';
-import getAxiosClient from '../../../../axios';
+import {getClient} from '../../../../axios';
 import { useQuery } from 'react-query';
 import { useUser } from '../../contexts/UserContext';
 import Cocktails from './Cocktails';
@@ -10,7 +10,7 @@ const MyCocktails = () => {
     const [_, toggle] = useState(false);
 
     const fetchData = async () => {
-        const response = await getAxiosClient().get(`api/cocktails`);
+        const response = await getClient().get(`api/cocktails`);
         return response.data;
       };
 

@@ -20,9 +20,10 @@ const LoginForm = () => {
 
     const { mutate: loginUser } = useMutation({
         mutationFn: loginUserFn,
-        onSuccess: ({ data: { accessToken, user } }) => {
+        onSuccess: ({ data: { accessToken, user, refreshToken } }) => {
             localStorage.setItem('token', accessToken);
             localStorage.setItem('user', JSON.stringify(user));
+            localStorage.setItem('refreshToken', refreshToken)
             setUser(user);
             navigate('/cocktails');
 
