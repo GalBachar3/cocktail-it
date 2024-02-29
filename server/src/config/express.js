@@ -5,6 +5,7 @@ import ErrorHandler, { notFoundError } from '../middlewares/error.middleware.js'
 import routes from '../routes.js';
 import multer from 'multer';
 import path from 'path';
+import { configSwagger } from './swagger.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -56,6 +57,8 @@ export const expressApp = () => {
     app.use(bodyParser.urlencoded({ extended: true }));
 
     app.use('/', routes);
+    
+    configSwagger(app);
 
     app.get('*', notFoundError);
     app.use(ErrorHandler);
