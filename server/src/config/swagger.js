@@ -12,7 +12,7 @@ export const configSwagger = (app) => {
       },
       servers: [{ url: "http://localhost:3000", },],
     },
-    apis: ["./src/api/*.js"],
+    apis: ["./src/**/*.js"],
   };
   const specs = swaggerJsDoc(options);
   app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(specs));
