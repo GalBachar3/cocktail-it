@@ -55,7 +55,7 @@ export const expressApp = () => {
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.use('/api', routes);
+    app.use('/', routes);
 
     app.get('*', notFoundError);
     app.use(ErrorHandler);

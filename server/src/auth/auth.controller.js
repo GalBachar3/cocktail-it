@@ -83,34 +83,40 @@ export const authUser = async ({ headers: { authorization } }, res, next) => {
 //     } else {
 //         user.refreshTokens.push(refreshToken);
 
-export const refresh = (req, res) => {
+export const refresh = async (req, res) => {
     const authHeader = req.headers['authorization'];
     //TODO: debug here
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
-    if (refreshToken == null) return res.sendStatus(401);
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
+    if (!refreshToken){
+        // return res.status(401);
+        throw "Refresh error"
+    }
+    return jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
         if (err) {
             console.log(err);
-            return res.sendStatus(401);
+            // return res.status(401);
+            throw "Refresh error"
         }
         try {
             const userDb = await UserModel.findOne({ '_id': user._id });
             if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
                 userDb.refreshTokens = [];
                 await userDb.save();
-                return res.sendStatus(401);
+                // return res.status(401);
+                throw "Refresh error"
             }
             const accessToken = getAccessToken(user)
             const newRefreshToken = getRefreshToken(user)
             userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
             userDb.refreshTokens.push(newRefreshToken);
             await userDb.save();
-            return res.status(200).send({
+            return res.status(200).json({
                 'accessToken': accessToken,
-                'refreshToken': refreshToken
+                'refreshToken': newRefreshToken
             });
         } catch (err) {
-            res.sendStatus(401).send(err.message);
+            console.log("error while trying to refresh");
+            res.sendStatus(500).send("error while trying to refresh");
         }
     });
 }
@@ -119,7 +125,7 @@ export const logout = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
     if (refreshToken == null) return res.status(401);
-    jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
+    return jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
         console.log(err);
         if (err) return res.status(401);
         try {

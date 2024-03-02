@@ -9,6 +9,6 @@ router.get('/me', authUser);
 router.post('/login', validate(LoginUserValidationSchema), loginUser);
 router.post('/register', validate(NewUserValidationSchema), registerUser);
 router.post("/google", googleSignin);
-router.post('/refreshToken', refresh);
+router.get('/refresh', refresh);
 router.get('/logout', logout);
 export default router;

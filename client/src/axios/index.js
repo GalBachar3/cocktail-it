@@ -4,11 +4,11 @@ const getToken = () => localStorage.getItem('token');
 export const getRefreshToken = () => localStorage.getItem("refreshToken");
 
 const client =  axios.create({
-    baseURL: 'http://localhost:3000/api/'
+    baseURL: 'http://localhost:3000/'
 });
 
 const unauthenticatedClient =  axios.create({
-    baseURL: 'http://localhost:3000/api/'
+    baseURL: 'http://localhost:3000/'
 });
 
 client.interceptors.request.use((config) => {
