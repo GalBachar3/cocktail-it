@@ -116,23 +116,28 @@ export const refresh = async (req, res) => {
 export const logout = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
-    if (refreshToken == null) return res.status(401);
+    
+    if (refreshToken == null) return res.status(401).send('Unauthorized');
+    
     return jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
         console.log(err);
-        if (err) return res.status(401);
+        
+        if (err) return res.status(401).send('Unauthorized');
+        
         try {
             const userDb = await UserModel.findOne({ '_id': user._id });
+
             if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
                 userDb.refreshTokens = [];
                 await userDb.save();
-                return res.status(401);
+                return res.status(401).send('Unauthorized');
             } else {
                 userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
                 await userDb.save();
-                return res.status(200);
+                return res.status(200).send('Logout successful');
             }
-        } catch (err) {
-            next(error)
+        } catch (error) {
+            next(error);
         }
     });
 }
