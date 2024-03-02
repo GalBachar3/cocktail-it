@@ -1,8 +1,14 @@
-import {getUnauthenticatedClient} from '.';
+import {getRefreshToken, getUnauthenticatedClient} from '.';
 
 export const registerUserFn = async newUser => await getUnauthenticatedClient().post(`auth/register`, newUser);
 
 export const loginUserFn = async user => await getUnauthenticatedClient().post(`auth/login`, user);
+
+export const logoutUserFn = async () => await getUnauthenticatedClient().get(`auth/logout`, {
+    headers: {
+        Authorization: `bearer ${getRefreshToken()}`
+    }
+});
 
 export const googleSignin = (credentialResponse) => {
     return new Promise((resolve, reject) => {

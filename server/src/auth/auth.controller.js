@@ -3,6 +3,7 @@ import _ from 'lodash';
 import { comparePaswords } from '../services/hashPassword.js';
 import { getAccessToken, getDecodedToken, getRefreshToken } from '../services/token.js';
 import { UserModel } from '../models/user.model.js';
+import jwt from 'jsonwebtoken';
 import { OAuth2Client } from 'google-auth-library';
 
 const findUserByUsername = async username => await UserModel.findOne({ username });
@@ -114,26 +115,26 @@ export const refresh = (req, res) => {
     });
 }
 
-export const logout = async (req, res) => {
+export const logout = async (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const refreshToken = authHeader && authHeader.split(' ')[1]; // Bearer <token>
-    if (refreshToken == null) return res.sendStatus(401);
+    if (refreshToken == null) return res.status(401);
     jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
         console.log(err);
-        if (err) return res.sendStatus(401);
+        if (err) return res.status(401);
         try {
             const userDb = await UserModel.findOne({ '_id': user._id });
             if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
                 userDb.refreshTokens = [];
                 await userDb.save();
-                return res.sendStatus(401);
+                return res.status(401);
             } else {
                 userDb.refreshTokens = userDb.refreshTokens.filter(t => t !== refreshToken);
                 await userDb.save();
-                return res.sendStatus(200);
+                return res.status(200);
             }
         } catch (err) {
-            res.sendStatus(401).send(err.message);
+            next(error)
         }
     });
 }

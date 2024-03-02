@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom';
 import stringToColor from 'string-to-color';
 import { useColorMode } from '../../../../Providers/ThemeProvider';
 import { useUser } from '../../../../Providers/UserProvider';
+import {getClient} from '../../../../axios';
+import { logoutUserFn } from '../../../../axios/auth';
 
 const getInitials = fullName => fullName === ''? '' : fullName.trim().split(/\s+/).map(name => name[0].toUpperCase()).join('').slice(0, 3);
 
@@ -17,7 +19,14 @@ const UserMenu = () => {
     const { user, setUser } = useUser();
     const queryCache = useQueryClient().getQueryCache();
 
-    const logoutUser = () => {
+    const logoutUser = async () => {
+        try {
+            await logoutUserFn();
+        }
+        catch (e) {
+            console.log(e.message)
+        }
+        
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         setUser(null);
@@ -88,7 +97,7 @@ const UserMenu = () => {
                     </ListItemIcon>
                     Change Color Mode
                 </MenuItem>
-                <MenuItem onClick={logoutUser}>
+                <MenuItem onClick={async () => {await logoutUser()}}>
                     <ListItemIcon>
                         <Logout fontSize="small" />
                     </ListItemIcon>

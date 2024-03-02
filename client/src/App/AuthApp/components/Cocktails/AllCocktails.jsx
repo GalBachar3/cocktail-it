@@ -1,11 +1,11 @@
 import * as React from 'react';
-import getAxiosClient from '../../../../axios';
+import {getClient} from '../../../../axios';
 import { useQuery } from 'react-query';
 import Cocktails from './Cocktails';
 
 const AllCocktails = () => {
     const fetchData = async () => {
-        const response = await getAxiosClient().get(`api/cocktails`);
+        const response = await getClient().get(`api/cocktails`);
         return response.data;
       };
 

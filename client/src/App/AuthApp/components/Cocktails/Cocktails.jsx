@@ -13,7 +13,7 @@ import ModeCommentOutlined from '@mui/icons-material/ModeCommentOutlined';
 import Face from '@mui/icons-material/Face';
 import CardMedia from '@mui/material/CardMedia';
 import { Button } from '@mui/material';
-import getAxiosClient from '../../../../axios';
+import {getClient} from '../../../../axios';
 import { useUser } from '../../contexts/UserContext';
 import { Delete, Edit } from '@mui/icons-material';
 
@@ -26,7 +26,7 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     const postComment =  async (cocktail) => {
       const userComment = {username: user.username, content: comment};
       cocktail.comments.push(userComment);
-      await getAxiosClient().put(`api/cocktails/${cocktail._id}`, cocktail);
+      await getClient().put(`api/cocktails/${cocktail._id}`, cocktail);
     }
 
     const handleInputChange = (event) => {
@@ -38,7 +38,7 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
 
   const deleteCocktail = async (cocktail) => {
     try {
-      await getAxiosClient().delete(`api/cocktails/${cocktail._id}`, cocktail);
+      await getClient().delete(`api/cocktails/${cocktail._id}`, cocktail);
 
       const updatedCocktailsList = cocktailsList.filter((c) => c._id !== cocktail._id);
       setCocktailsList(updatedCocktailsList);
