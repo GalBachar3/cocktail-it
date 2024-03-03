@@ -6,21 +6,32 @@ const router = AsyncRouter();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         userId:
- *           type: string
- *           description: The unique identifier of the user.
- *         username:
- *           type: string
- *           description: The username of the user.
- *         email:
- *           type: string
- *           format: email
- *           description: The email address of the user.
+ *  components:
+ *    schemas:
+ *      User:
+ *        type: object
+ *        properties:
+ *          name:
+ *            type: string
+ *            description: The name of the user.
+ *          username:
+ *            type: string
+ *            description: The username chosen by the user.
+ *          password:
+ *            type: string
+ *            description: The encrypted password chosen by the user.
+ *          email:
+ *            type: string
+ *            format: email
+ *            description: The email address of the user.
+ *          image:
+ *            type: string
+ *            description: URL or path to the user's profile image.
+ *          refreshTokens:
+ *            type: array
+ *            items:
+ *              type: string
+ *            description: An array of refresh tokens associated with the user.
  * 
  * api/users/:
  *   get:

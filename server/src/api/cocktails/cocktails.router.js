@@ -5,26 +5,35 @@ import { protect } from "../../middlewares/auth.middleware.js";
 const router = AsyncRouter();
 /**
  * @swagger
- * components:
- *   schemas:
- *     Cocktail:
- *       type: object
- *       properties:
- *         cocktailId:
- *           type: string
- *           description: The unique identifier of the cocktail.
- *         name:
- *           type: string
- *           description: The name of the cocktail.
- *         ingredients:
- *           type: string
- *           description: The list of ingredients in the cocktail.
- *           items:
- *             type: string
- *         instructions:
- *           type: string
- *           description: The instructions for preparing the cocktail.
- * 
+ *components:
+ *  schemas:
+ *    Cocktail:
+ *      type: object
+ *      properties:
+ *        name:
+ *          type: string
+ *          description: The name of the cocktail.
+ *        category:
+ *          type: string
+ *          description: The category of the cocktail.
+ *        ingredients:
+ *          type: string
+ *          description: The ingredients of the cocktail.
+ *        instructions:
+ *          type: string
+ *          description: The instructions for preparing the cocktail.
+ *        userId:
+ *          type: string
+ *          description: The user ID associated with the cocktail.
+ *        image:
+ *          type: string
+ *          description: The URL or path to an image of the cocktail.
+ *        username:
+ *          type: string
+ *          description: The username of the user who created the cocktail.
+ *        comments:
+ *          type: string
+ *          description: Comments or additional notes about the cocktail.
  * api/cocktails:
  *   get:
  *     summary: Get all cocktails
