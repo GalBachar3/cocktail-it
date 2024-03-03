@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Avatar, Typography, Container, Paper, TextField, Button, Input } from '@mui/material';
 import { useUser } from '../../contexts/UserContext';
 import {getClient} from '../../../../axios';
+import axios from 'axios';
 
 const Profile = () => {
   const { user, setUser } = useUser();
@@ -18,7 +19,7 @@ const Profile = () => {
     formData.append('image', imageFile);
     let imageUrl = user.image;
         if(imageFile && user?.image !== imageFile){
-          const response = await getClient().post('http://localhost:3000/api/upload', formData, {
+          const response = await axios.post('http://localhost:3000/api/upload', formData, {
             headers: {'Content-Type': 'multipart/form-data'}
           });
           
