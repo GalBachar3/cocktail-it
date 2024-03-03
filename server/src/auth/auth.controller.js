@@ -12,16 +12,19 @@ export const registerUser = async ({ body }, res, next) => {
     try {
         const user = await findUserByUsername(body.username);
 
-        if (user) {
-            throw createHttpError(400, 'Username already in use')
+        if (!!user) {
+            throw createHttpError(406, 'Username already in use')
         }
 
         body.name = body.name.replace(/\s+/g, ' ').trim().toLowerCase().split(' ').map(x => _.upperFirst(x)).join(' ');
         const newUser = new UserModel(body);
-        newUser.save();
+        await newUser.save();
 
         return res.status(200).json(newUser);
     } catch (error) {
+        if (error.code === 11000) {
+            return res.status(406).json({ error: 'Username already in use' });
+        }
         next(error)
     }
 };
@@ -29,7 +32,6 @@ export const registerUser = async ({ body }, res, next) => {
 export const loginUser = async ({ body: { username, password } }, res, next) => {
     try {
         const user = await findUserByUsername(username);
-
         if (user) {
             const match = await comparePaswords(password, user.password);
 
@@ -65,13 +67,18 @@ export const authUser = async ({ headers: { authorization } }, res, next) => {
                 res.locals.userId = user._id;
                 return next();
             } else {
-                throw createHttpError(400, 'Wrong User Token');
+                throw createHttpError(401, 'Wrong User Token');
             }
         } else {
-            throw createHttpError(400, 'No authorization');
+            throw createHttpError(401, 'No authorization');
         }
     } catch (error) {
-        next(error)
+        if (error.name === 'JsonWebTokenError') {
+            console.log('JWT Error:', error.message);
+            return res.status(401).json({ error: 'Invalid token' });
+        } else {
+            next(error);
+        }
     }
 };
 

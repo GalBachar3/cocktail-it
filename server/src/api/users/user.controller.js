@@ -11,16 +11,28 @@ export const getUsers = async (req, res, next) => {
 };
 
 export const deleteUser = async (req, res) => {
-    const userId = req.params.id;
+  const userId = req.params.id;
 
-    UserModel.findByIdAndDelete(userId, (err, deletedUser) => {
-        if (err) {
-            return res.status(500).json({ error: err.message });
-        }
+  try {
+    const deletedUser = await UserModel.findByIdAndDelete(
+      userId,
+      req.body,
+      { new: true }
+    );
 
-        res.json();
-    });
-}
+    if (!deletedUser) {
+      return res.status(404).json({ error: 'user not found' });
+    }
+
+    res.status(200).json(deletedUser);
+  } catch (error) {
+    console.error('Error deleting user:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+};
+
+
+
 
 export const updateUser = async (req, res) => {
     const userId = req.params.id;

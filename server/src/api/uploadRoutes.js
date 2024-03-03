@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { Router } from 'express';
 import multer from 'multer';
 import path from 'path';
 import dotenv from 'dotenv';
@@ -34,8 +34,4 @@ app.post('/upload', upload.single('image'), (req, res) => {
   } else {
     res.status(500).json({ error: 'Error uploading image' });
   }
-});
-
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
 });

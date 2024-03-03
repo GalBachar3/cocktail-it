@@ -1,11 +1,17 @@
 import mongoose from 'mongoose';
 
-const MONGO_URI = process.env.MONGO_URI || 'mongodb://127.0.0.1:27017';
+const getDbUri = () => {
+    if(process.env.NODE_ENV === 'test'){
+        return process.env.MONGO_TEST_URI;
+    }
+
+    return process.env.MONGO_URI;
+}
 
 export const connectToDatabase = async () => {
     try {
-        console.log(MONGO_URI);
-        await mongoose.connect(MONGO_URI);
+        console.log(getDbUri());
+        await mongoose.connect(getDbUri());
         console.log('Connected to MongoDb');
     } catch (error) {
         console.log(error);

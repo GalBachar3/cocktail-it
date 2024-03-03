@@ -9,10 +9,10 @@ import { configSwagger } from './swagger.js';
 
 const app = express();
 const port = process.env.PORT || 3000;
-// app.use(cors({
-//     origin: 'http://localhost:5173', // Adjust the client's URL
-//     optionsSuccessStatus: 200,
-//   }));
+app.use(cors({
+    origin: 'http://localhost:5173', // Adjust the client's URL
+    optionsSuccessStatus: 200,
+  }));
 
 
 // Set up the storage for Multer
@@ -66,4 +66,6 @@ export const expressApp = () => {
     app.listen(port, () => {
         console.log(`Server is running on http://localhost:${port}`);
     });
+
+    return app;
 }
