@@ -38,7 +38,7 @@ client.interceptors.response.use(
           localStorage.setItem('refreshToken', response.data.refreshToken);
           unauthenticatedClient.defaults.headers.common[
             "Authorization"
-          ] = `Bearer ${response.data.accessToken}`;
+          ] = `bearer ${response.data.accessToken}`;
           return client(originalRequest);
         } catch (error) {
           return Promise.reject(error);

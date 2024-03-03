@@ -151,7 +151,6 @@ export const logout = async (req, res, next) => {
 
 const client = new OAuth2Client();
 export const googleSignin = async (req, res) => {
-    console.log("dsdsdssd",req.body);
     try {
         const ticket = await client.verifyIdToken({
             idToken: req.body.credential,
@@ -166,7 +165,7 @@ export const googleSignin = async (req, res) => {
                 user = await UserModel.create(
                     {
                         'name' : '',
-                        'username': '',
+                        'username': email,
                         'email': email,
                         'password': '0',
                         'image': payload?.picture

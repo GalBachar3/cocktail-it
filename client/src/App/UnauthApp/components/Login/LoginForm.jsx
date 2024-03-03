@@ -39,6 +39,7 @@ const LoginForm = () => {
         try {
             const res = await googleSignin(credentialResponse)
             localStorage.setItem('token', res.accessToken);
+            localStorage.setItem('refreshToken', res.refreshToken)
             localStorage.setItem('user', JSON.stringify(res.user));
             setUser(res.user);
             navigate('/cocktails');
