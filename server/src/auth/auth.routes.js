@@ -24,28 +24,12 @@ const router = AsyncRouter();
 
 /**
  * @swagger
- * components:
- *   schemas:
- *     User:
- *       type: object
- *       properties:
- *         userId:
- *           type: string
- *           description: The unique identifier of the user.
- *         username:
- *           type: string
- *           description: The username of the user.
- *         email:
- *           type: string
- *           format: email
- *           description: The email address of the user.
- * 
- * /me:
+ * auth/me:
  *   get:
  *     summary: Get user information
  *     description: Fetch information about the authenticated user.
  *     tags:
- *       - User
+ *       - Authentication
  *     security:
  *       - BearerAuth: []
  *     responses:
@@ -80,7 +64,7 @@ router.get('/me', authUser);
  *           description: The password of the user.
  *           example: mySecurePassword
  * 
- * /login:
+ * auth/login:
  *   post:
  *     summary: User login
  *     description: Authenticate a user and obtain access and refresh tokens.
@@ -116,7 +100,7 @@ router.post('/login', validate(LoginUserValidationSchema), loginUser);
 
 /**
 * @swagger
-* /auth/register:
+* auth/register:
 *   post:
 *     summary: registers a new user
 *     tags: 
@@ -139,7 +123,7 @@ router.post('/register', validate(NewUserValidationSchema), registerUser);
 
 /**
  * @swagger
- * /google:
+ * auth/google:
  *   get:
  *     summary: Initiate Google OAuth authentication
  *     description: Redirects the user to Google for authentication.
@@ -167,7 +151,7 @@ router.post("/google", googleSignin);
  *           type: string
  *           description: The new refresh token.
  * 
- * /refresh:
+ * auth/refresh:
  *   post:
  *     summary: Refresh access token
  *     description: |
@@ -200,7 +184,7 @@ router.get('/refresh', refresh);
 // Logout route
 /**
  * @swagger
- * /logout:
+ * auth/logout:
  *   post:
  *     summary: Logout a user
  *     description: Invalidate the user's refresh token, effectively logging them out.
