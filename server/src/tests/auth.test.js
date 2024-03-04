@@ -109,18 +109,18 @@ describe("Auth tests", () => {
     expect(response2.statusCode).toBe(200);
   });
 
-//   test("Test double use of refresh token", async () => {
-//     const response = await request(app)
-//       .get("/auth/refresh")
-//       .set("Authorization", "bearer " + refreshToken)
-//       .send();
-//     expect(response.statusCode).not.toBe(200);
+  test("Test double use of refresh token", async () => {
+    const response = await request(app)
+      .get("/auth/refresh")
+      .set("Authorization", "bearer " + refreshToken)
+      .send();
+    expect(response.statusCode).not.toBe(200);
 
-//     //verify that the new token is not valid as well
-//     const response1 = await request(app)
-//       .get("/auth/refresh")
-//       .set("Authorization", "bearer " + newRefreshToken)
-//       .send();
-//     expect(response1.statusCode).not.toBe(200);
-//   });
+    //verify that the new token is not valid as well
+    const response1 = await request(app)
+      .get("/auth/refresh")
+      .set("Authorization", "bearer " + newRefreshToken)
+      .send();
+    expect(response1.statusCode).not.toBe(200);
+  });
 });
