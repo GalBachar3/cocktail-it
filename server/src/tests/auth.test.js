@@ -25,9 +25,14 @@ const loginUser = {
 }
 
 beforeAll(async () => {
+    process.env.JWT_EXPIRATION = "4s";
     app = await initApp();
     await UserModel.deleteMany({ 'email': user.email });
   }, 60000);
+
+afterAll(async () => {
+  await mongoose.connection.close();
+});
   
 describe("Auth tests", () => {
   test("Test register", async () => {
@@ -77,16 +82,14 @@ describe("Auth tests", () => {
     expect(response.statusCode).toBe(401);
   });
 
-// //   jest.setTimeout(10000);
+  test("Test access after timeout of token", async () => {
+    await new Promise(resolve => setTimeout(() => resolve("done"), 5000));
 
-// //   test("Test access after timeout of token", async () => {
-// //     await new Promise(resolve => setTimeout(() => resolve("done"), 5000));
-
-// //     const response = await request(app)
-// //       .get("/api/cocktails")
-// //       .set("Authorization", "bearer " + accessToken);
-// //     expect(response.statusCode).not.toBe(200);
-// //   });
+    const response = await request(app)
+      .get("/api/cocktails")
+      .set("Authorization", "bearer " + accessToken);
+    expect(response.statusCode).not.toBe(200);
+  }, 10000);
 
   test("Test refresh token", async () => {
     const response = await request(app)
