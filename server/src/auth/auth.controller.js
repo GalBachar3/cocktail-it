@@ -93,16 +93,14 @@ export const refresh = async (req, res) => {
     return jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET, async (err, user) => {
         if (err) {
             console.log(err);
-            // return res.status(401);
-            throw "Refresh error"
+            return res.status(401);
         }
         try {
             const userDb = await UserModel.findOne({ '_id': user._id });
             if (!userDb.refreshTokens || !userDb.refreshTokens.includes(refreshToken)) {
                 userDb.refreshTokens = [];
                 await userDb.save();
-                // return res.status(401);
-                throw "Refresh error"
+                return res.status(401);
             }
             const accessToken = getAccessToken(user)
             const newRefreshToken = getRefreshToken(user)
