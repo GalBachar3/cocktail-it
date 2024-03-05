@@ -44,12 +44,7 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
     try {      
       let imageUrl = cocktail? cocktail.image : '';
         if(image && cocktail?.image !== image){
-          //TODO change the url
-          const response =
-          //  await uploadRequest(imageFormData);
-          await axios.post(`${env.serverAddress}api/upload`, imageFormData, {
-            headers: {'Content-Type': 'multipart/form-data'}
-          });
+          const response = await uploadRequest(imageFormData);
           
           imageUrl = response.data.imageUrl;
         }

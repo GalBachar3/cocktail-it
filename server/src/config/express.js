@@ -13,21 +13,7 @@ app.use(cors({
     origin: 'http://localhost:5173', // Adjust the client's URL
     optionsSuccessStatus: 200,
   }));
-
-
-// Set up the storage for Multer
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-      cb(null, './public/images/');
-    },
-    filename: function (req, file, cb) {
-      cb(null, file.fieldname + '-' + Date.now() + path.extname(file.originalname));
-    }
-  });
   
-  const upload = multer({ storage: storage });
-  
- 
 export const expressApp = () => {
     app.use(cors({
       origin: 'http://localhost:5173', // Allow only requests from this origin
@@ -41,16 +27,6 @@ export const expressApp = () => {
     
     app.get('/', (req, res) => {
       res.render('index');
-    });
-    
-    app.post('/api/upload', upload.single('image'), (req, res) => {
-      console.log("asfssag", req.body)
-      if (req.file) {
-        const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
-        res.json({ imageUrl });
-      } else {  
-        res.status(500).json({ error: 'Error uploading image' });
-      }
     });
   
     app.use(bodyParser.json());

@@ -53,7 +53,9 @@ export const getClient = () => client
 
 export const getUnauthenticatedClient = () => unauthenticatedClient
 
-export const uploadRequest = async (data) => await client.post(`/api/upload`, data, {
+export const uploadRequest = async (data) => await axios.create({
+  baseURL: env.serverAddress
+}).post(`/api/file`, data, {
     headers: {'Content-Type': 'multipart/form-data',
             'Authorization':  `bearer ${getToken()}`}
   });
