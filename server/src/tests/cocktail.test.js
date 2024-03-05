@@ -1,6 +1,8 @@
 import request from "supertest";
 import { initApp } from "../../app";
 import { UserModel } from "../models/user.model";
+import mongoose from "mongoose";
+
 
 let app;
 let accessToken;
@@ -50,6 +52,10 @@ beforeAll(async () => {
     const loginResponse = await request(app).post("/auth/login").send(loginUser);    
     accessToken = loginResponse.body.accessToken;
   }, 60000);
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
 
 describe("Cocktail tests", () => {
   const updateCocktail = async () => {

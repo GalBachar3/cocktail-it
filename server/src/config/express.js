@@ -63,9 +63,5 @@ export const expressApp = () => {
     app.get('*', notFoundError);
     app.use(ErrorHandler);
 
-    app.listen(port, () => {
-        console.log(`Server is running on http://localhost:${port}`);
-    });
-
     return app;
 }

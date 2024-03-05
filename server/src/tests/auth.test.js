@@ -33,7 +33,7 @@ beforeAll(async () => {
 afterAll(async () => {
   await mongoose.connection.close();
 });
-  
+
 describe("Auth tests", () => {
   test("Test register", async () => {
     const registerResponse = await request(app).post("/auth/register").send(user);

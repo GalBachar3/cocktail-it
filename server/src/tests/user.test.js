@@ -1,6 +1,8 @@
 import request from "supertest";
 import { initApp } from "../../app";
 import { UserModel } from "../models/user.model";
+import mongoose from "mongoose";
+
 
 let app;
 let accessToken;
@@ -15,7 +17,7 @@ const user = {
 }
 
 const updatedUser = {
-    email: "testStudent@test.com",
+    email: "test@test.com",
     password: "1234567890",
     username: 'testtt',
     name: 'testtt',
@@ -36,6 +38,10 @@ beforeAll(async () => {
     const loginResponse = await request(app).post("/auth/login").send(loginUser);    
     accessToken = loginResponse.body.accessToken;
   }, 60000);
+
+  afterAll(async () => {
+    await mongoose.connection.close();
+  });
   
 describe("User tests", () => {
   const updateUser = async () => {
