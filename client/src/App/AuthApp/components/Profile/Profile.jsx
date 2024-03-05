@@ -19,7 +19,7 @@ const Profile = () => {
     formData.append('image', imageFile);
     let imageUrl = user.image;
         if(imageFile && user?.image !== imageFile){
-          const response = await axios.post('http://localhost:3000/api/upload', formData, {
+          const response = await axios.post(`${env.serverAddress}api/upload`, formData, {
             headers: {'Content-Type': 'multipart/form-data'}
           });
           

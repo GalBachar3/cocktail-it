@@ -1,14 +1,15 @@
 import axios from 'axios';
+import { env } from '../env';
 
 const getToken = () => localStorage.getItem('token');
 export const getRefreshToken = () => localStorage.getItem("refreshToken");
 
 const client =  axios.create({
-    baseURL: 'http://localhost:3000/'
+    baseURL: env.serverAddress
 });
 
 const unauthenticatedClient =  axios.create({
-    baseURL: 'http://localhost:3000/'
+    baseURL: env.serverAddress
 });
 
 client.interceptors.request.use((config) => {
@@ -52,3 +53,7 @@ export const getClient = () => client
 
 export const getUnauthenticatedClient = () => unauthenticatedClient
 
+export const uploadRequest = async (data) => await client.post(`/api/upload`, data, {
+    headers: {'Content-Type': 'multipart/form-data',
+            'Authorization':  `bearer ${getToken()}`}
+  });
