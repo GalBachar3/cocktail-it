@@ -53,7 +53,8 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
         ...data,
         username: user.username,
         userId: user._id,
-        image: imageUrl
+        image: imageUrl,
+        _id: cocktail?._id
       });
   
       reset();
