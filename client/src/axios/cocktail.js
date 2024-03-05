@@ -1,7 +1,8 @@
 import axios from "axios"
+import { env } from "../env";
 
 export const getRandomCocktail = async () => {
-    const {data} = await axios.get('https://www.thecocktaildb.com/api/json/v1/1/random.php');
+    const {data} = await axios.get(env.randomCocktailApi);
     const cocktail = data.drinks[0];
     const {strDrink: name, strCategory: category, strInstructions: instructions } = cocktail;
     const ingredients = getIngredientsString(cocktail);

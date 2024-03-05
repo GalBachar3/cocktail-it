@@ -7,7 +7,7 @@ import UpdateIcon from '@mui/icons-material/Update';
 import ShuffleIcon from '@mui/icons-material/Shuffle';
 import { getRandomCocktail } from '../../../../axios/cocktail';
 import { useUser } from '../../contexts/UserContext';
-import { getClient } from '../../../../axios';
+import { getClient, uploadRequest } from '../../../../axios';
 import axios from 'axios';
 
 
@@ -42,7 +42,9 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
       let imageUrl = cocktail? cocktail.image : '';
         if(image && cocktail?.image !== image){
           //TODO change the url
-          const response = await axios.post('http://localhost:3000/api/upload', imageFormData, {
+          const response =
+          //  await uploadRequest(imageFormData);
+          await axios.post('http://localhost:3000/api/upload', imageFormData, {
             headers: {'Content-Type': 'multipart/form-data'}
           });
           
