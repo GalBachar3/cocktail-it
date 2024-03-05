@@ -9,12 +9,14 @@ import { getRandomCocktail } from '../../../../axios/cocktail';
 import { useUser } from '../../contexts/UserContext';
 import { getClient, uploadRequest } from '../../../../axios';
 import axios from 'axios';
+import { addEditCocktailFormSchema } from './validationSchema';
+import { zodResolver } from '@hookform/resolvers/zod';
 import { env } from '../../../../env';
 
 
 const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
   const {user} = useUser();
-  const { register, handleSubmit, setValue, reset, watch } = useForm();
+  const { register, handleSubmit, setValue, reset, watch } = useForm({ resolver: zodResolver(addEditCocktailFormSchema) });
   const image = watch('image');
   const [randomImageUrl, setRandomImageUrl] = useState('');
 
