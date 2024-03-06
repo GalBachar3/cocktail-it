@@ -21,6 +21,7 @@ export const expressApp = () => {
       credentials: true, // Allow sending cookies and HTTP authentication
       allowedHeaders: 'Content-Type,Authorization',
     }));
+
     app.use(express.static('public'));
     app.use(express.urlencoded({ extended: false }));
     app.set('view engine', 'ejs');

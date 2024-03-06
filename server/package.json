@@ -13,8 +13,8 @@
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "testCocktail": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=cocktail.test.js",
     "testAuth": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=auth.test.js",
-    "testUser": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=user.test.js"
-
+    "testUser": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=user.test.js",
+    "testUpload": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=file.test.js"
   },
   "author": "",
   "license": "ISC",

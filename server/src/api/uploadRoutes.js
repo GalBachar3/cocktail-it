@@ -18,7 +18,6 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage });
 
 router.post('/', upload.single('image'), (req, res) => {
-  console.log("asfssag", req.body)
   if (req.file) {
     const imageUrl = `${req.protocol}://${req.get('host')}/images/${req.file.filename}`;
     res.json({ imageUrl });
