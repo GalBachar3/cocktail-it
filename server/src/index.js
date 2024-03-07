@@ -1,6 +1,10 @@
 import 'dotenv/config';
 import { connectToDatabase } from './config/db.js';
 import { expressApp } from './config/express.js';
+import http from 'http'
+import https from "https";
+import fs from "fs";
+import path from "path";
 
 const port = process.env.PORT || 3000;
 
@@ -8,9 +12,23 @@ connectToDatabase()
     .then(()=> {
         const app = expressApp();
 
-        app.listen(port, () => {
+        if (process.env.NODE_ENV !== "production") {
+            console.log("development mode");
+            http.createServer(app).listen(port, () => {
             console.log(`Server is running on http://localhost:${port}`);
         });
+        } else {
+            console.log("production mode");
+          const options = {
+            key: fs.readFileSync(path.join(__dirname, "../cert/client-key.pem")),
+            cert: fs.readFileSync(path.join(__dirname, "../cert/client-cert.pem")),
+          };
+          https.createServer(options, app).listen(process.env.HTTPS_PORT, () => {
+            console.log(`server listening on port ${process.env.HTTPS_PORT}`);
+          });
+        }
+
+        
     })
     .catch(error => {
         console.log(error);
