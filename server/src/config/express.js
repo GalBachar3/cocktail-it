@@ -22,13 +22,18 @@ export const expressApp = () => {
       allowedHeaders: 'Content-Type,Authorization',
     }));
 
-    app.use(express.static('public'));
+    // app.use(express.static('public'));
+    app.use(express.static(path.join(dirname, 'dist')));
+
+    app.get('/*', (req, res) => {
+      res.sendFile(path.join(dirname, 'dist', 'index.html'));
+    });
     app.use(express.urlencoded({ extended: false }));
     app.set('view engine', 'ejs');
     
-    app.get('/', (req, res) => {
-      res.render('index');
-    });
+    // app.get('/', (req, res) => {
+    //   res.render('index');
+    // });
   
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));

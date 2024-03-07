@@ -10,7 +10,7 @@
     "build": "babel src -d dist",
     "dev": "npm run start:dev",
     "prod": "node dist/src/index.js",
-    "prod1": "cp .envprod .env && babel src -d dist && node dist/src/index.js",
+    "prod1": "babel src -d dist && node dist/src/index.js",
     "seed": "node src/seed.js",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js --runInBand",
     "testCocktail": "node --experimental-vm-modules node_modules/jest/bin/jest.js --testPathPattern=cocktail.test.js",
