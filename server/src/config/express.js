@@ -10,17 +10,14 @@ import { configSwagger } from './swagger.js';
 const dirname = path.resolve();
 const app = express();
 const port = process.env.PORT || 3000;
-app.use(cors({
-    origin: 'http://localhost:5173', // Adjust the client's URL
-    optionsSuccessStatus: 200,
-  }));
   
 export const expressApp = () => {
     app.use(cors({
-      origin: 'http://localhost:5173', // Allow only requests from this origin
+      origin: 'https://node17.cs.colman.ac.il', // Allow only requests from this origin
       methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
       credentials: true, // Allow sending cookies and HTTP authentication
       allowedHeaders: 'Content-Type,Authorization',
+      optionsSuccessStatus: 200
     }));
 
     // app.use(express.static('public'));
