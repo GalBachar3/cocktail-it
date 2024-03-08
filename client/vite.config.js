@@ -16,8 +16,8 @@ export default defineConfig({
   server: {
     port: 3000,
     proxy: {
-      '/api': 'http://localhost:3000',
-      '/auth': 'http://localhost:3000',
+      '/api': "https://node17.cs.colman.ac.il",
+      '/auth': "https://node17.cs.colman.ac.il",
     },
   },
 });
