@@ -21,8 +21,8 @@ connectToDatabase()
         } else {
             console.log("production mode");
           const options = {
-            key: fs.readFileSync(path.join(dirname, "../cert/client-key.pem")),
-            cert: fs.readFileSync(path.join(dirname, "../cert/client-cert.pem")),
+            key: fs.readFileSync(path.join(dirname, "./cert/client-key.pem")),
+            cert: fs.readFileSync(path.join(dirname, "./cert/client-cert.pem")),
           };
           https.createServer(options, app).listen(process.env.HTTPS_PORT, () => {
             console.log(`server listening on port ${process.env.HTTPS_PORT}`);
