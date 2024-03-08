@@ -23,6 +23,7 @@ app.use(cors({
 
 // Serve static files from the 'dist' directory
 app.use(express.static(path.join(dirname, 'dist')));
+app.use(express.static('public'));
 
 // Parse JSON and URL-encoded data
 app.use(bodyParser.json());
