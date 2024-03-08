@@ -10,38 +10,45 @@ import { configSwagger } from './swagger.js';
 const dirname = path.resolve();
 const app = express();
 const port = process.env.PORT || 3000;
-  
+
 export const expressApp = () => {
-    app.use(cors({
-      origin: 'https://node17.cs.colman.ac.il', // Allow only requests from this origin
-      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-      credentials: true, // Allow sending cookies and HTTP authentication
-      allowedHeaders: 'Content-Type,Authorization',
-      optionsSuccessStatus: 200
-    }));
+ // Enable CORS
+app.use(cors({
+  origin: 'https://node17.cs.colman.ac.il', // Allow only requests from this origin
+  methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+  credentials: true, // Allow sending cookies and HTTP authentication
+  allowedHeaders: 'Content-Type,Authorization',
+  optionsSuccessStatus: 200
+}));
 
-    // app.use(express.static('public'));
-    app.use('/', routes);
+// Serve static files from the 'dist' directory
+app.use(express.static(path.join(dirname, 'dist')));
 
-    app.use(express.static(path.join(dirname, 'dist')));
+// Parse JSON and URL-encoded data
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-    app.get('/*', (req, res) => {
-      res.sendFile(path.join(dirname, 'dist', 'index.html'));
-    });
-    app.use(express.urlencoded({ extended: false }));
-    app.set('view engine', 'ejs');
-    
-    // app.get('/', (req, res) => {
-    //   res.render('index');
-    // });
-  
-    app.use(bodyParser.json());
-    app.use(bodyParser.urlencoded({ extended: true }));
-    
-    configSwagger(app);
+// Configure Swagger
+configSwagger(app);
 
-    app.get('*', notFoundError);
-    app.use(ErrorHandler);
+// Handle API routes
+app.use('/', routes);
 
-    return app;
+// Catch-all route for serving index.html
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(dirname, 'dist', 'index.html'));
+});
+
+// Handle 404 errors
+app.use(notFoundError);
+
+// Handle other errors with the custom error handler
+app.use(ErrorHandler);
+
+app.listen(port, () => {
+  console.log(`Server is running on port ${port}`);
+});
+
+return app;
+
 }
