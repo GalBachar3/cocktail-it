@@ -7,6 +7,7 @@ import multer from 'multer';
 import path from 'path';
 import { configSwagger } from './swagger.js';
 
+const dirname = path.resolve();
 const app = express();
 const port = process.env.PORT || 3000;
 app.use(cors({
