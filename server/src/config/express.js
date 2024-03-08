@@ -21,6 +21,8 @@ export const expressApp = () => {
     }));
 
     // app.use(express.static('public'));
+    app.use('/', routes);
+
     app.use(express.static(path.join(dirname, 'dist')));
 
     app.get('/*', (req, res) => {
@@ -35,8 +37,6 @@ export const expressApp = () => {
   
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
-
-    app.use('/', routes);
     
     configSwagger(app);
 
