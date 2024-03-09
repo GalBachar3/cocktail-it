@@ -46,9 +46,9 @@ app.use(notFoundError);
 // Handle other errors with the custom error handler
 app.use(ErrorHandler);
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+// app.listen(port, () => {
+//   console.log(`Server is running on port ${port}`);
+// });
 
 return app;
 
