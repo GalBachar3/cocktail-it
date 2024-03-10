@@ -67,8 +67,9 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
                   <CardMedia
                   component="img"
                   height="194"
+                  width="194"
                   src={cocktail.image}
-                  sx={{ objectFit: "cover" }}
+                  sx={{ objectFit: "cover", width:194,marginLeft:'150px' }}
                 />}
 
 
