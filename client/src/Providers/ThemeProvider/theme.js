@@ -2,10 +2,11 @@ const lightTheme = {
     palette: {
         mode: 'light',
         primary: {
-            main: '#071952'
+           
+            main: '#a2bae6'
         },
         secondary: {
-            main: '#0B666A'
+            main: '#f9f5da'
         },
         background: {
             // default: '#35A29F',
