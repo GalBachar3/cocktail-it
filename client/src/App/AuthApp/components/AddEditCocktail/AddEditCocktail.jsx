@@ -89,11 +89,12 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
   }, [cocktail, setValue]);
 
   return (
-    <Card sx={{ maxWidth: 400, margin: 'auto', height: '100%', overflow: 'hidden',boxShadow: 4 , backgroundColor:'secondary.main'}}>
+    <Card sx={{ maxWidth: 400, margin: 'auto', height: '100%', overflow: 'auto',boxShadow: 4 , backgroundColor:'secondary.main'}}>
       <CardContent>
         <Typography variant="h5" align="center" gutterBottom>
           {cocktail ? 'Update Cocktail' : 'Create Cocktail'}
         </Typography>
+        <br/>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Grid container spacing={2}>
 
@@ -102,10 +103,10 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
             type="file"
             {...register('image')}
             onChange={handleImageChange}
-            style={{ marginBottom: '10px' }}
+            style={{ marginRight:'100px', marginLeft:'100px',marginBottom: '10px' }}
           />
           
-          <div style={{ marginTop: '20px' }}>
+          <div style={{ marginTop: '20px', marginLeft:'95px' }}>
           { image && (
             <img
               src={getImageSrc()}
@@ -118,6 +119,9 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               <TextField
                 fullWidth
                 label="Name"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 {...register('name')}
                 required
               />
@@ -126,6 +130,9 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               <TextField
                 fullWidth
                 label="Category"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 {...register('category')}
                 required
               />
@@ -134,6 +141,9 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               <TextField
                 fullWidth
                 label="Ingredients"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 {...register('ingredients')}
                 required
               />
@@ -142,11 +152,14 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               <TextField
                 fullWidth
                 label="Instructions"
+                InputLabelProps={{
+                  shrink: true,
+                }}
                 {...register('instructions')}
                 required
               />
             </Grid>
-            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+            <Grid item xs={12} sx={{ textAlign: 'center', paddingBottom:0 }}>
               <Button
                 type="submit"
                 variant="contained"
@@ -156,9 +169,9 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               >
                 {cocktail ? 'Update' : 'Insert'}
               </Button>
-            </Grid>
+            
             {
-              !cocktail && <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              !cocktail && <Grid item xs={12} sx={{ textAlign: 'center', paddingTop:0 }}>
               <Button
                 variant="contained"
                 color="primary"
@@ -170,6 +183,7 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
               </Button>
             </Grid>
             }
+            </Grid>
           </Grid>
         </form>
       </CardContent>
