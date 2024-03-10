@@ -16,6 +16,7 @@ import { Button } from '@mui/material';
 import {getClient} from '../../../../axios';
 import { useUser } from '../../contexts/UserContext';
 import { Delete, Edit } from '@mui/icons-material';
+import { NoCocktails } from './NoCocktails';
 
 const Cocktails = ({cocktails, isDeletable = false}) => {
     const [comment, setComment] = useState('');
@@ -53,8 +54,8 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     
     return (
       <Box sx={{display:'flex', flexDirection: 'column', alignItems:"center"}}>
-        {cocktailsList && cocktailsList.map((cocktail, index) => (
-          <Card sx={{ m: 2, width: "500px" }} key={index}>
+        {!cocktailsList?.length ? <NoCocktails /> : cocktailsList.map((cocktail, index) => (
+          <Card sx={{ m: 2, width: "500px", backgroundColor:'secondary.main' }} key={index}>
             {
                 <>
                   <CardContent sx={{display: 'flex', justifyContent: 'center'}}>

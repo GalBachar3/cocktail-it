@@ -52,7 +52,7 @@ const Profile = () => {
 
   return (
     <Container maxWidth="sm">
-      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', textAlign: 'center' }}>
+      <Paper elevation={3} style={{ padding: '20px', marginTop: '20px', textAlign: 'center', backgroundColor:'secondary.main' }}>
       <Input
           id="image-input"
           type="file"

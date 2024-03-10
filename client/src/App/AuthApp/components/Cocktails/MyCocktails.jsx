@@ -26,7 +26,7 @@ const MyCocktails = () => {
 
     return (
         <>
-        {data && <Cocktails isDeletable={true} cocktails={data.filter(x=>x.userId === user._id)} />}
+        {<Cocktails isDeletable={true} cocktails={data?.filter(x=>x.userId === user._id)} />}
         </>
     )
   };

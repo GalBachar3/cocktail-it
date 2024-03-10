@@ -2,6 +2,7 @@ import * as React from 'react';
 import {getClient} from '../../../../axios';
 import { useQuery } from 'react-query';
 import Cocktails from './Cocktails';
+import { NoCocktails } from './NoCocktails';
 
 const AllCocktails = () => {
     const fetchData = async () => {
@@ -21,7 +22,7 @@ const AllCocktails = () => {
 
     return (
         <>
-        {data && <Cocktails cocktails={data} />}
+        {<Cocktails cocktails={data} />}
         </>
     )
   };

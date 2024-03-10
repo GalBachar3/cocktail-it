@@ -89,7 +89,7 @@ const CocktailForm = ({ cocktail = null, onSubmitHandler }) => {
   }, [cocktail, setValue]);
 
   return (
-    <Card sx={{ maxWidth: 400, margin: 'auto', height: '100%', overflow: 'auto',boxShadow: 4 }}>
+    <Card sx={{ maxWidth: 400, margin: 'auto', height: '100%', overflow: 'hidden',boxShadow: 4 , backgroundColor:'secondary.main'}}>
       <CardContent>
         <Typography variant="h5" align="center" gutterBottom>
           {cocktail ? 'Update Cocktail' : 'Create Cocktail'}
