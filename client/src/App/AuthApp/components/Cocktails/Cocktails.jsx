@@ -19,10 +19,30 @@ import { Delete, Edit } from '@mui/icons-material';
 import { NoCocktails } from './NoCocktails';
 
 const Cocktails = ({cocktails, isDeletable = false}) => {
+    const [cocktailsList, setCocktailsList] = useState(cocktails);
+
+    const handleDeleteCocktail = (cocktailId) => {
+      const updatedCocktailsList = cocktailsList.filter((c) => c._id !== cocktailId);
+      setCocktailsList(updatedCocktailsList);
+    }
+    
+    return (
+      <Box sx={{display:'flex', flexDirection: 'column', alignItems:"center"}}>
+        {!cocktailsList?.length ? <NoCocktails /> : cocktailsList.map((cocktail, index) => (
+          <Card sx={{ m: 2, width: "500px", backgroundColor:'secondary.main' }} key={index}>
+            {
+                <Cocktail cocktail={cocktail} isDeletable={isDeletable} handleDeleteCocktail={handleDeleteCocktail} />
+            }
+          </Card>
+        ))}
+      </Box>
+    );
+  };
+
+  const Cocktail = ({cocktail, isDeletable = false, handleDeleteCocktail}) => {
     const [comment, setComment] = useState('');
     const {user} = useUser();
     const navigate = useNavigate();
-    const [cocktailsList, setCocktailsList] = useState(cocktails);
 
     const postComment =  async (cocktail) => {
       if (comment.trim() !== '') { 
@@ -44,8 +64,7 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     try {
       await getClient().delete(`api/cocktails/${cocktail._id}`, cocktail);
 
-      const updatedCocktailsList = cocktailsList.filter((c) => c._id !== cocktail._id);
-      setCocktailsList(updatedCocktailsList);
+      handleDeleteCocktail(cocktail._id);
     } catch (error) {
       console.log(error);
     }
@@ -54,13 +73,9 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
   const updateCocktail = (cocktail) => {
     navigate(`/my-cocktails/${cocktail._id}/edit-cocktail`,{state: { cocktail: cocktail }});
   }
-    
-    return (
-      <Box sx={{display:'flex', flexDirection: 'column', alignItems:"center"}}>
-        {!cocktailsList?.length ? <NoCocktails /> : cocktailsList.map((cocktail, index) => (
-          <Card sx={{ m: 2, width: "500px", backgroundColor:'secondary.main' }} key={index}>
-            {
-                <>
+
+    return(
+      <>
                   <CardContent sx={{display: 'flex', justifyContent: 'center'}}>
                     <Typography variant="h3" fontWeight="bold">
                          {cocktail.name}
@@ -143,13 +158,10 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
         <Button disabled={comment.trim() === ''} onClick={()=> postComment(cocktail)} underline="none" role="button">
           Post
         </Button>
-      </CardContent>
-                </>
-            }
-          </Card>
-        ))}
-      </Box>
-    );
-  };
+       </CardContent>
+      </>
+    )
+    
+  }
   
 export default Cocktails;
