@@ -25,9 +25,12 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     const [cocktailsList, setCocktailsList] = useState(cocktails);
 
     const postComment =  async (cocktail) => {
-      const userComment = {username: user.username, content: comment};
-      cocktail.comments.push(userComment);
-      await getClient().put(`api/cocktails/${cocktail._id}`, cocktail);
+      if (comment.trim() !== '') { 
+        const userComment = {username: user.username, content: comment};
+        cocktail.comments.push(userComment);
+        await getClient().put(`api/cocktails/${cocktail._id}`, cocktail);
+      }
+      setComment('');
     }
 
     const handleInputChange = (event) => {
@@ -84,6 +87,15 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
     
       <CardContent>
 
+      <Typography fontSize="sm">
+        <Typography variant="h5" fontWeight="bold">
+        Category:
+      </Typography>
+      <Typography variant="body1" style={{ fontSize: '1.2rem' }}>
+        {cocktail.category}
+      </Typography>
+        </Typography>
+
         <Typography fontSize="sm">
         <Typography variant="h5" fontWeight="bold">
         Instructions:
@@ -128,7 +140,7 @@ const Cocktails = ({cocktails, isDeletable = false}) => {
           placeholder="Add a comment…"
           sx={{ flex: 1, px: 0, '--Input-focusedThickness': '0px' }}
         />
-        <Button onClick={()=> postComment(cocktail)} underline="none" role="button">
+        <Button disabled={comment.trim() === ''} onClick={()=> postComment(cocktail)} underline="none" role="button">
           Post
         </Button>
       </CardContent>
