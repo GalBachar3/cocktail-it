@@ -22,7 +22,10 @@ app.use(cors({
 }));
 
 // Serve static files from the 'dist' directory
-app.use(express.static(path.join(dirname, 'dist')));
+if(process.env.NODE_ENV === 'production'){
+  app.use(express.static(path.join(dirname, 'dist')));
+}
+
 app.use(express.static('public'));
 
 // Parse JSON and URL-encoded data
