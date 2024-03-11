@@ -15,6 +15,9 @@ connectToDatabase()
 
         if (process.env.NODE_ENV !== "production") {
             console.log("development mode");
+            http.createServer(app).listen(port, () => {
+            console.log(`Server is running on http://localhost:${port}`);
+        });
         } else {
             console.log("production mode");
           const options = {
